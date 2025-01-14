@@ -1,9 +1,5 @@
-# shellcheck=sh
-
 # Chezmoi
 alias cz="chezmoi"
-alias czadd="chezmoi add"
-alias czapp="chezmoi apply"
 
 # Snapper
 alias snapper="snapper -c home"
