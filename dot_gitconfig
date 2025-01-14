@@ -1,0 +1,7 @@
+[credential]
+	helper = store
+[user]
+	name = bemain
+	email = bemain.dev@gmail.com
+[init]
+	defaultBranch = main
