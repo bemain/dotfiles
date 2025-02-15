@@ -16,8 +16,14 @@ if command -v flutter > /dev/null ; then
     export PATH="$PATH:/usr/local/flutter/bin/"
 fi
 if command -v dart > /dev/null ; then
-	export PATH="$PATH":"$HOME/.pub-cache/bin"
+	export PATH="$PATH:$HOME/.pub-cache/bin"
 fi
 if command -v chromium-browser > /dev/null ; then
     export CHROME_EXECUTABLE="$(which chromium-browser)" 2>/dev/null
 fi
+
+# Android studio
+if [ -d $HOME/Android/Sdk ]; then
+  export PATH="$PATH:$HOME/Android/Sdk/platform-tools"
+fi
+
