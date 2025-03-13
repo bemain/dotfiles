@@ -24,6 +24,12 @@ fi
 
 # Android studio
 if [ -d $HOME/Android/Sdk ]; then
-  export PATH="$PATH:$HOME/Android/Sdk/platform-tools"
+	export PATH="$PATH:$HOME/Android/Sdk/platform-tools"
 fi
 
+# Pyenv
+if [ -d $HOME/Android/Sdk ]; then
+	export PYENV_ROOT="$HOME/.pyenv"
+	[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+	eval "$(pyenv init - bash)"
+fi
