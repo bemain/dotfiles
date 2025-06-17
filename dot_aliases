@@ -4,6 +4,6 @@ alias cz="chezmoi"
 # Snapper
 alias snapper="snapper -c home"
 
-# VSCode alias
-container_name="$(printf '{"containerName":"%s"}' "my-distrobox" | od -A n -t x1 | tr -d "\n\t ")"
-alias code='flatpak run com.visualstudio.code --folder-uri="vscode-remote://attached-container+${container_name}/$(realpath "$(pwd)")"'
+# Distrobox
+alias db="distrobox"
+alias dbassemble="distrobox assemble create --file '$HOME/.local/share/chezmoi/distrobox/distrobox.ini'"
