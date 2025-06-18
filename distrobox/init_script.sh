@@ -16,6 +16,7 @@ fi
 # This is the first run
 echo "The marker file '$FILE_TO_CHECK' is NOT present."
 echo "This appears to be the first run of the script."
+
 touch "$FILE_TO_CHECK"
 
 # Check if the file was created successfully
@@ -41,6 +42,10 @@ sudo dnf copr enable -y lihaohong/chezmoi
 # Install packages
 sudo dnf check-update -y
 sudo dnf install -y codium chezmoi
+
+# Install Flutter
+sudo mkdir /usr/local/flutter
+wget -q -O - "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.32.4-stable.tar.xz" | sudo tar -xJf - -C /usr/local/
 
 
 exit 0
