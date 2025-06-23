@@ -16,6 +16,12 @@ FLATPAK_APP_IDS=(
     "org.mozilla.firefox"
     "runtime/org.freedesktop.Platform.ffmpeg-full/x86_64/24.08" # For Firefox
     "org.prismlauncher.PrismLauncher"
+    "de.haeckerfelix.Fragments" # BitTorrent client
+    "com.spotify.Client"
+    "io.github.MakovWait.Godots"
+    "org.gimp.GIMP"
+    "org.inkscape.Inkscape"
+    "org.musescore.MuseScore"
     "org.gnome.Boxes"
     "org.gnome.Extensions"
     "org.gnome.Loupe" # Image viewer
