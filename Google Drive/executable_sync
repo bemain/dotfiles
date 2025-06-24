@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+
+
+echo "Syncing folder: Vaults"
+rclone bisync "/home/agardh/Google Drive/Vaults" "gdrive:Vaults" --check-access --check-filename .RCLONE_TEST --drive-skip-gdocs
+
+echo "Syncing folder: Musescore"
+rclone bisync "/home/agardh/Google Drive/Musik" "gdrive:Musik" --drive-skip-gdocs
+
+echo "Sync done."
+
+sleep 3
