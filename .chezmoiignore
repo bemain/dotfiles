@@ -1,2 +1,5 @@
 README.md
 distrobox/
+
+# Oh my zsh
+.oh-my-zsh/cache/completions/
