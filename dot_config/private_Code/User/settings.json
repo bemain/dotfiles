@@ -1,0 +1,36 @@
+{
+    "python.analysis.typeCheckingMode": "strict",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportUnusedVariable": "information",
+        "reportUnusedImport": "information",
+    },
+    "editor.fontFamily": "MesloLGS NF",
+    "dev.containers.dockerPath": "/app/tools/podman/bin/podman-remote",
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "terminal.integrated.fontFamily": "MesloLGS NF",
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true,
+    "git.openRepositoryInParentFolders": "never",
+    "gitlens.currentLine.enabled": false,
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false
+    },
+    "workbench.settings.applyToAllProfiles": [
+        "terminal.integrated.defaultProfile.linux",
+        "terminal.integrated.fontFamily",
+        "git.autofetch",
+        "git.confirmSync",
+        "git.enableSmartCommit",
+        "git.openRepositoryInParentFolders",
+        "gitlens.currentLine.enabled",
+        "github.copilot.enable"
+    ],
+    "geminicodeassist.project": "",
+    "diffEditor.codeLens": true,
+    "editor.renderWhitespace": "none",
+    "editor.renderControlCharacters": false,
+}
