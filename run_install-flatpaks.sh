@@ -23,13 +23,15 @@ FLATPAK_APP_IDS=(
     "org.musescore.MuseScore"
     "org.gnome.Boxes"
     "org.gnome.Extensions"
-    "org.gnome.Loupe" # Image viewer
     "org.gnome.Snapshot" # Camera
     "org.gnome.TextEditor"
     "org.gnome.baobab" # Disk usage analyzer
     "org.gnome.Evince" # Document viewer
     "org.gnome.font-viewer"
     "org.gnome.NautilusPreviewer"
+    "org.gnome.Loupe" # Image viewer
+    "org.gnome.Showtime" # Video player
+    "org.gnome.Decibels" # Audio player
 )
 
 # Set to 'true' if you want installations to be system-wide (requires sudo).
@@ -64,7 +66,6 @@ done
 
 
 if (( ${#INSTALL_APPS[@]} )); then
-    echo "--- Installing apps. ---"
     echo "Installing ${INSTALL_APPS[*]}"
     # INSTALL_APPS not empty
     flatpak uninstall ${INSTALL_APPS[*]} -y
