@@ -2,4 +2,6 @@ README.md
 distrobox/
 
 # Oh my zsh
-.oh-my-zsh/cache/completions/
+.oh-my-zsh/cache/
+
+.config/MuseScore/MuseScore4.ini
