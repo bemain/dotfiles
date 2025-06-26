@@ -6,7 +6,6 @@
 # If it's not installed from 'flathub' (meaning it's either not installed or
 # installed from a different remote), it will install it from 'flathub'.
 
-# TODO: Remove system-wide duplicates
 
 FLATPAK_APP_IDS=(
     "com.bitwarden.desktop"
@@ -47,11 +46,11 @@ else
 fi
 
 # Check if Flathub remote exists. Add it if not. When INSTALL_SYSTEM_WIDE is true, this requires sudo.
-echo "--- Ensuring Flathub remote is added. ---"
+echo "Ensuring Flathub remote is added."
 
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo "${FLATPAK_SCOPE_FLAG}"
 
-echo "--- Checking which apps need to be (re)installed. ---"
+echo "Checking which Flatpak apps need to be (re)installed."
 
 INSTALL_APPS=()
 
@@ -74,8 +73,5 @@ if (( ${#INSTALL_APPS[@]} )); then
         echo "ERROR: Failed to install apps from Flathub."
     fi
 else
-    echo "No apps to install."
+    echo "No Flatpak apps to install."
 fi
-
-
-echo "--- Flatpak remote check and installation complete. ---"
