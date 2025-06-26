@@ -1,4 +1,6 @@
 #!/bin/bash
+# Updates the font cache
 
-# Update font cache
-fc-cache -v
+echo "Updating font cache."
+
+fc-cache
