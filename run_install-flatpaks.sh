@@ -8,13 +8,16 @@
 
 
 FLATPAK_APP_IDS=(
+    "com.github.tchx84.Flatseal"
     "com.bitwarden.desktop"
     "com.discordapp.Discord"
     "md.obsidian.Obsidian"
     "org.fedoraproject.MediaWriter"
     "org.mozilla.firefox"
     "runtime/org.freedesktop.Platform.ffmpeg-full/x86_64/24.08" # For Firefox
-    "org.prismlauncher.PrismLauncher"
+    "org.prismlauncher.PrismLauncher" # Minecraft
+    "com.valvesoftware.Steam"
+    "com.heroicgameslauncher.hgl" # Epic Games, GOG...
     "de.haeckerfelix.Fragments" # BitTorrent client
     "com.spotify.Client"
     "io.github.MakovWait.Godots"
