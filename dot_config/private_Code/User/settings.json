@@ -33,4 +33,19 @@
     "diffEditor.codeLens": true,
     "editor.renderWhitespace": "none",
     "editor.renderControlCharacters": false,
+    "jupyter.interactiveWindow.creationMode": "perFile",
+    "plantuml.server": "http://localhost:8080",
+    "plantuml.render": "PlantUMLServer",
+    "containers.containerClient": "com.microsoft.visualstudio.containers.podman",
+    "[dart]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.rulers": [
+            80
+        ],
+        "editor.selectionHighlight": false,
+        "editor.tabCompletion": "onlySnippets",
+        "editor.wordBasedSuggestions": "off"
+    },
+    "update.showReleaseNotes": false,
 }
