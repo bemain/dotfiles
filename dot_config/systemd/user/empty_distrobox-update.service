@@ -1,0 +1,13 @@
+[Unit]
+Description=Automatically update all distroboxes
+Documentation=man:distrobox(1)
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/distrobox upgrade --all
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
