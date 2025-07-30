@@ -1,5 +1,5 @@
 {
-    "python.analysis.typeCheckingMode": "strict",
+    "python.analysis.typeCheckingMode": "standard",
     "python.analysis.diagnosticSeverityOverrides": {
         "reportUnusedVariable": "information",
         "reportUnusedImport": "information",
@@ -48,4 +48,6 @@
         "editor.wordBasedSuggestions": "off"
     },
     "update.showReleaseNotes": false,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "git.blame.editorDecoration.enabled": false,
 }
