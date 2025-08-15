@@ -5,6 +5,7 @@
         "reportUnusedImport": "information",
     },
     "editor.fontFamily": "MesloLGS NF",
+    "editor.bracketPairColorization.enabled": false,
     "dev.containers.dockerPath": "/app/tools/podman/bin/podman-remote",
     "terminal.integrated.defaultProfile.linux": "zsh",
     "terminal.integrated.fontFamily": "MesloLGS NF",
@@ -14,7 +15,7 @@
     "git.openRepositoryInParentFolders": "never",
     "gitlens.currentLine.enabled": false,
     "github.copilot.enable": {
-        "*": true,
+        "*": false,
         "plaintext": false,
         "markdown": false,
         "scminput": false
@@ -50,4 +51,5 @@
     "update.showReleaseNotes": false,
     "github.copilot.nextEditSuggestions.enabled": true,
     "git.blame.editorDecoration.enabled": false,
+    "workbench.colorTheme": "Gruvbox Material Dark",
 }
