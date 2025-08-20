@@ -8,33 +8,36 @@
 
 
 FLATPAK_APP_IDS=(
-    "com.github.tchx84.Flatseal"
     "com.bitwarden.desktop"
     "com.discordapp.Discord"
-    "md.obsidian.Obsidian"
-    "org.fedoraproject.MediaWriter"
-    "org.mozilla.firefox"
-    "runtime/org.freedesktop.Platform.ffmpeg-full/x86_64/24.08" # For Firefox
-    "org.prismlauncher.PrismLauncher" # Minecraft
-    "com.valvesoftware.Steam"
+    "com.github.tchx84.Flatseal"
     "com.heroicgameslauncher.hgl" # Epic Games, GOG...
-    "de.haeckerfelix.Fragments" # BitTorrent client
     "com.spotify.Client"
+    "com.valvesoftware.Steam"
+    "de.haeckerfelix.Fragments" # BitTorrent client
     "io.github.MakovWait.Godots"
+    "md.obsidian.Obsidian"
+    "org.audacityteam.Audacity"
+    "org.fedoraproject.MediaWriter"
     "org.gimp.GIMP"
-    "org.inkscape.Inkscape"
-    "org.musescore.MuseScore"
     "org.gnome.Boxes"
+    "org.gnome.Decibels" # Audio player
+    "org.gnome.Evince" # Document viewer
     "org.gnome.Extensions"
+    "org.gnome.Loupe" # Image viewer
+    "org.gnome.NautilusPreviewer"
+    "org.gnome.Showtime" # Video player
+    "org.gnome.SimpleScan" # Document scanner
     "org.gnome.Snapshot" # Camera
     "org.gnome.TextEditor"
     "org.gnome.baobab" # Disk usage analyzer
-    "org.gnome.Evince" # Document viewer
     "org.gnome.font-viewer"
-    "org.gnome.NautilusPreviewer"
-    "org.gnome.Loupe" # Image viewer
-    "org.gnome.Showtime" # Video player
-    "org.gnome.Decibels" # Audio player
+    "org.inkscape.Inkscape"
+    "org.libreoffice.LibreOffice"
+    "org.mozilla.firefox"
+    "runtime/org.freedesktop.Platform.ffmpeg-full/x86_64/24.08" # For Firefox
+    "org.musescore.MuseScore"
+    "org.prismlauncher.PrismLauncher" # Minecraft
 )
 
 # Set to 'true' if you want installations to be system-wide (requires sudo).
