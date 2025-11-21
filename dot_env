@@ -13,7 +13,7 @@ fi
 
 
 # Flutter
-if command -v flutter > /dev/null ; then
+if [ -d /usr/local/flutter ]; then
     export PATH="$PATH:/usr/local/flutter/bin/"
 fi
 if command -v dart > /dev/null ; then
@@ -40,4 +40,9 @@ if [ -d $HOME/.config/nvm ]; then
 	export NVM_DIR="$HOME/.config/nvm"
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
+
+# Balena CLI
+if [ -d $HOME/.local/share/balena ]; then
+	export export PATH="$PATH:$HOME/.local/share/balena/bin"
 fi

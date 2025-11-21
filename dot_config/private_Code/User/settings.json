@@ -46,10 +46,11 @@
         ],
         "editor.selectionHighlight": false,
         "editor.tabCompletion": "onlySnippets",
-        "editor.wordBasedSuggestions": "off"
+        "editor.wordBasedSuggestions": "off",
     },
     "update.showReleaseNotes": false,
     "github.copilot.nextEditSuggestions.enabled": true,
     "git.blame.editorDecoration.enabled": false,
+    "dart.flutterSdkPath": "/usr/local/flutter/bin",
     "workbench.colorTheme": "Gruvbox Material Dark",
 }

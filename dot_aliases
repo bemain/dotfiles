@@ -7,3 +7,5 @@ alias snapper="snapper -c home"
 # Distrobox
 alias db="distrobox"
 alias dbassemble="distrobox assemble create --file '$HOME/.local/share/chezmoi/distrobox/distrobox.ini'"
+
+alias yt-mp3="yt-dlp -f ba -x --audio-format mp3"
