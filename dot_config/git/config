@@ -1,12 +1,26 @@
 [credential]
 	helper = store
+
 [user]
 	name = bemain
 	email = bemain.dev@gmail.com
+
 [init]
 	defaultBranch = main
+
 [push]
+    default = current
 	autoSetupRemote = true
+
+[pull]
+    rebase = true
+
+[color]
+    ui = auto
+
+[core]
+    excludesFile = $HOME/.config/git/ignore
+
 [alias]
 	# Undo last commit but keep changes
 	undo = reset HEAD~1 --soft
