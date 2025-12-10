@@ -1,0 +1,5 @@
+# https://docs.astral.sh/uv/reference/settings/#python-downloads
+python-downloads = "automatic"
+# https://docs.astral.sh/uv/reference/settings/#python-preference
+python-preference = "only-managed"
+
