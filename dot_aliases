@@ -1,3 +1,5 @@
+alias open="xdg-open"
+
 # Chezmoi
 alias cz="chezmoi"
 
