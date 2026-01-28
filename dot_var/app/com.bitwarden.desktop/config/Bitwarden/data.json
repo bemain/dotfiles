@@ -1,0 +1,23 @@
+{
+	"stateVersion": 74,
+	"global_desktopSettings_modalMode": {
+		"isModalModeActive": false
+	},
+	"global_loginEmail_storedEmail": "bemain.dev@gmail.com",
+	"global_account_accounts": {
+		"a95322f2-cd7b-4d06-a854-ade5008f7e42": {
+			"name": "BeMain",
+			"email": "bemain.dev@gmail.com",
+			"creationDate": "2021-11-19T08:42:26.476Z"
+		}
+	},
+	"global_account_activeAccountId": "a95322f2-cd7b-4d06-a854-ade5008f7e42",
+	"user_a95322f2-cd7b-4d06-a854-ade5008f7e42_vaultTimeoutSettings_vaultTimeoutAction": "lock",
+	"user_a95322f2-cd7b-4d06-a854-ade5008f7e42_vaultTimeoutSettings_vaultTimeout": "onRestart",
+	"global_desktopSettings_trayEnabled": true,
+	"global_desktopSettings_closeToTray": true,
+	"global_desktopSettings_startToTray": true,
+	"global_desktopSettings_openAtLogin": true,
+	"global_desktopSettings_sshAgentEnabled": true,
+	"user_a95322f2-cd7b-4d06-a854-ade5008f7e42_desktopSettings_sshAgentRememberAuthorizations": "rememberUntilLock"
+}
