@@ -11,3 +11,13 @@ alias db="distrobox"
 alias dbassemble="distrobox assemble create --file '$HOME/.local/share/chezmoi/distrobox/distrobox.ini'"
 
 alias yt-mp3="yt-dlp -f ba -x --audio-format mp3"
+
+# Overwrite some git commands
+git() {
+  local cmd=$1; shift
+  if command -v "git_$cmd" >/dev/null 2>/dev/null; then
+    "git_$cmd" "$@"
+  else
+    command git "$cmd" "$@"
+  fi
+}
