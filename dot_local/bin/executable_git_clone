@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+if [ "$#" -lt 1 ]; then
+    echo "Usage: git-clone <remote-url> [destination]" >&2
+    exit 1
+fi
+
+remote_url=$1
+destination=$2
+
+if [ -z "$destination" ]; then
+    destination="${remote_url##*/}"
+    destination="${destination%.git}"
+else
+    destination="${destination%.git}"
+fi
+
+source __git-prompt --skip-remote || exit 1
+
+git clone "$remote_url" "$destination" || exit 1
+
+cd "$destination" || exit 1
+source __git-config --skip-remote || exit 1

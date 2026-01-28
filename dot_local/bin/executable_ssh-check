@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+has_error=0
+
+if [ -z "${SSH_AUTH_SOCK}" ]; then
+    echo "❌ SSH_AUTH_SOCK is not set" >&2
+    has_error=1
+elif [ ! -S "$SSH_AUTH_SOCK" ]; then
+    echo "❌ SSH_AUTH_SOCK points to invalid socket: $SSH_AUTH_SOCK" >&2
+    has_error=1
+else
+    echo "✅ SSH agent socket found at: $SSH_AUTH_SOCK"
+fi
+
+if [ $has_error -eq 0 ]; then
+    ssh-add -l &>/dev/null
+    exit_code=$?
+    
+    if [ $exit_code -eq 2 ]; then
+        echo "❌ SSH agent is not responding" >&2
+        has_error=1
+    elif [ $exit_code -eq 1 ]; then
+        echo "⚠️ No SSH keys loaded in agent" >&2
+        has_error=1
+    else
+        key_count=$(ssh-add -l | wc -l)
+        echo "✅ SSH agent is responding with $key_count key(s) loaded"
+    fi
+fi
+
+if [ $has_error -eq 0 ]; then
+    echo "✅ SSH agent is properly configured and ready"
+    exit 0
+else
+    echo "❌ SSH agent configuration needs attention"
+    exit 1
+fi

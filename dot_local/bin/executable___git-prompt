@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+SKIP_REMOTE=false
+for arg in "$@"; do
+    if [ "$arg" == "--skip-remote" ]; then
+        SKIP_REMOTE=true
+    fi
+done
+
+current_name=$(git config user.name 2>/dev/null)
+current_email=$(git config user.email 2>/dev/null)
+current_remote=$(git remote get-url origin 2>/dev/null)
+
+if [ "$SKIP_REMOTE" = false ]; then
+    if [ -n "$current_remote" ]; then
+        read -p "remote.origin.url ($current_remote): " __git_remote_input
+    else
+        read -p "remote.origin.url (git@github.com:OWNER/REPOSITORY.git): " __git_remote_input
+    fi
+    export __git_remote_url="${__git_remote_input:-$current_remote}"
+fi
+
+read -p "user.name (${current_name:-required}): " __git_name_input
+export __git_name="${__git_name_input:-$current_name}"
+
+read -p "user.email (${current_email:-required}): " __git_email_input
+export __git_email="${__git_email_input:-$current_email}"
+
+if [ -z "$__git_name" ] || [ -z "$__git_email" ]; then
+    echo "Error: user.name and user.email are required." >&2
+    exit 1
+fi

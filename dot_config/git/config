@@ -5,6 +5,11 @@
 	name = bemain
 	email = bemain.dev@gmail.com
 
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	defaultKeyCommand = sh -c 'ssh-add -L | head -n 1'
+
 [init]
 	defaultBranch = main
 
@@ -14,6 +19,12 @@
 
 [pull]
     rebase = true
+
+[commit]
+	gpgsign = true
+
+[tag]
+	gpgsign = true
 
 [color]
     ui = auto

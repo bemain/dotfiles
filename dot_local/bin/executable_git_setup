@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+    git init || exit 1
+fi
+
+source __git-prompt || exit 1
+source __git-config || exit 1

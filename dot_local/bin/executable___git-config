@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+SKIP_REMOTE=false
+for arg in "$@"; do
+    if [ "$arg" == "--skip-remote" ]; then
+        SKIP_REMOTE=true
+    fi
+done
+
+git config --local user.name "$__git_name" || exit 1
+git config --local user.email "$__git_email" || exit 1
+
+git config --local --unset core.sshCommand 2>/dev/null
+git config --local --unset user.signingkey 2>/dev/null
+
+if [ "$SKIP_REMOTE" = false ] && [ -n "$__git_remote_url" ]; then
+    if git remote get-url origin >/dev/null 2>&1; then
+        git remote set-url origin "$__git_remote_url"
+    else
+        git remote add origin "$__git_remote_url"
+    fi
+fi
+
+unset __git_name __git_email __git_remote_url
