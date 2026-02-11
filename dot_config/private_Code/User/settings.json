@@ -52,6 +52,8 @@
     "github.copilot.nextEditSuggestions.enabled": true,
     "git.blame.editorDecoration.enabled": false,
     "dart.flutterSdkPath": "/usr/local/flutter/bin",
-    "workbench.colorTheme": "Gruvbox Dark Soft",
+    "workbench.colorTheme": "Gruvbox Material Dark",
     "http.systemCertificatesNode": true,
+    "git.enableCommitSigning": true,
+    "git.pruneOnFetch": true,
 }

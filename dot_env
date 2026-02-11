@@ -48,4 +48,4 @@ if [ -d $HOME/.local/share/balena ]; then
 fi
 
 # Bitwarden SSH agent
-export SSH_AUTH_SOCK="$HOME/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock"
+export SSH_AUTH_SOCK="/home/agardh/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock"
