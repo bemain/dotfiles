@@ -7,6 +7,8 @@ rclone bisync "$HOME/Google Drive/Obsidian" "gdrive:Obsidian" --check-access --c
 echo "Syncing folder: Musescore"
 rclone bisync "$HOME/Google Drive/Musik" "gdrive:Musik" --check-access --check-filename .RCLONE_TEST --drive-skip-gdocs
 
+echo "Syncing folder: Chalmers"
+rclone bisync "$HOME/Google Drive/Chalmers" "gdrive:Chalmers" --check-access --check-filename .RCLONE_TEST --drive-skip-gdocs
 
 echo "Sync done."
 
