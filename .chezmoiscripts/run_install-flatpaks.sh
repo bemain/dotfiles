@@ -38,6 +38,7 @@ FLATPAK_APP_IDS=(
     "runtime/org.freedesktop.Platform.ffmpeg-full/x86_64/24.08" # For Firefox
     "org.musescore.MuseScore"
     "org.prismlauncher.PrismLauncher" # Minecraft
+    "com.google.AndroidStudio"
 )
 
 # Set to 'true' if you want installations to be system-wide (requires sudo).
