@@ -7,8 +7,6 @@
 
 [gpg]
 	format = ssh
-[gpg "ssh"]
-	defaultKeyCommand = sh -c 'ssh-add -L | head -n 1'
 
 [init]
 	defaultBranch = main

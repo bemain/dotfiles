@@ -1,8 +1,54 @@
 #!/usr/bin/env bash
 
-if ! git rev-parse --git-dir >/dev/null 2>&1; then
-    git init || exit 1
+# 1. Check if we are actually in a git repo
+if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+    echo "Error: You are not inside a Git repository."
+    return 1
 fi
 
-source __git-prompt || exit 1
-source __git-config || exit 1
+echo "--- Repository Configuration ---"
+
+# 2. Prompt for Identity (Defaults to current config if exists)
+CURRENT_NAME=$(git config user.name)
+CURRENT_EMAIL=$(git config user.email)
+
+read -p "Enter Name [Current: $CURRENT_NAME]: " GIT_NAME
+read -p "Enter Email [Current: $CURRENT_EMAIL]: " GIT_EMAIL
+
+# Use input or fallback to current if empty
+git config user.name "${GIT_NAME:-$CURRENT_NAME}"
+git config user.email "${GIT_EMAIL:-$CURRENT_EMAIL}"
+
+# 3. Handle SSH Keys from Bitwarden Agent
+echo -e "\nFetching keys from Bitwarden agent..."
+mapfile -t keys < <(ssh-add -L)
+
+if [ ${#keys[@]} -eq 0 ]; then
+    echo "No keys found in Bitwarden agent. Is your vault unlocked?"
+    return 1
+fi
+
+echo "Select the Bitwarden SSH key for this repo:"
+select key in "${keys[@]}"; do
+    if [ -n "$key" ]; then
+        # Store the public key reference inside the .git folder
+        # This makes the repo "portable" across your local machine
+        PUBKEY_PATH="$(git rev-parse --show-toplevel)/.git/id_bw.pub"
+        echo "$key" > "$PUBKEY_PATH"
+
+        # Force this repo to use ONLY this key for SSH connections
+        git config core.sshCommand "ssh -i $PUBKEY_PATH -o IdentitiesOnly=yes"
+        
+        # Configure Signing
+        git config user.signingkey "$PUBKEY_PATH"
+        git config gpg.format ssh
+        git config commit.gpgsign true
+
+        echo -e "\nDone! Configured as:"
+        echo "  User: $(git config user.name) <$(git config user.email)>"
+        echo "  Key: ${key:0:30}..."
+        break
+    else
+        echo "Invalid selection."
+    fi
+done

@@ -1,23 +1,18 @@
 #!/usr/bin/env bash
 
-if [ "$#" -lt 1 ]; then
-    echo "Usage: git-clone <remote-url> [destination]" >&2
-    exit 1
+# 1. Ask for the Repo URL if not provided
+URL=$1
+if [ -z "$URL" ]; then
+    echo "Usage: git_clone <repository_url>"
+    return 1
 fi
 
-remote_url=$1
-destination=$2
+# 2. Extract folder name from URL to enter it later
+FOLDER=$(basename "$URL" .git)
 
-if [ -z "$destination" ]; then
-    destination="${remote_url##*/}"
-    destination="${destination%.git}"
-else
-    destination="${destination%.git}"
-fi
+# 3. Perform the initial clone
+git clone "$URL"
+if [ $? -ne 0 ]; then return 1; fi
+cd "$FOLDER" || return
 
-source __git-prompt --skip-remote || exit 1
-
-git clone "$remote_url" "$destination" || exit 1
-
-cd "$destination" || exit 1
-source __git-config --skip-remote || exit 1
+source git_setup || exit 1

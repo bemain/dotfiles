@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Visual Studio Code - URL Handler (on fedora)
+Comment=Code Editing. Redefined.
+GenericName=Text Editor (on fedora)
+Exec=/usr/bin/distrobox-enter  -n fedora  --   bash -l -c "/usr/share/code/code --open-url  %U"
+Icon=vscode
+Type=Application
+NoDisplay=true
+StartupNotify=true
+Categories=Utility;TextEditor;Development;IDE;
+MimeType=x-scheme-handler/vscode;
+Keywords=vscode;
+StartupWMClass=code
