@@ -22,7 +22,6 @@ FLATPAK_APP_IDS=(
     "org.gimp.GIMP"
     "org.gnome.Boxes"
     "org.gnome.Decibels" # Audio player
-    "org.gnome.Evince" # Document viewer
     "org.gnome.Extensions"
     "org.gnome.Loupe" # Image viewer
     "org.gnome.NautilusPreviewer"
