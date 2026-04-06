@@ -3,11 +3,12 @@
 	"global_desktopSettings_modalMode": {
 		"isModalModeActive": false
 	},
-	"global_loginEmail_storedEmail": "bemain.dev@gmail.com",
+	"global_loginEmail_storedEmail": "benjamin.agardh@gmail.com",
 	"global_account_accounts": {
 		"a95322f2-cd7b-4d06-a854-ade5008f7e42": {
 			"name": "BeMain",
-			"email": "bemain.dev@gmail.com",
+			"email": "benjamin.agardh@gmail.com",
+			"emailVerified": true,
 			"creationDate": "2021-11-19T08:42:26.476Z"
 		}
 	},
