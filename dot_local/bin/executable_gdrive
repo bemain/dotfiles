@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+
+# --- Configuration ---
+CONFIG_DIR="$HOME/.config/gdrive-sync"
+CONFIG_FILE="$CONFIG_DIR/config.yml"
+REMOTE="gdrive:"
+REMOTE_ROOT="Fedora Backup"
+
+# Recommended comparison flags for reliability
+COMPARE_FLAGS="--compare size,modtime,checksum --modify-window 1s"
+
+# Ensure config directory and valid YAML file exist
+mkdir -p "$CONFIG_DIR"
+if [[ ! -f "$CONFIG_FILE" ]]; then
+    echo "paths: []" > "$CONFIG_FILE"
+fi
+
+# --- Helper: Perform Sync ---
+do_sync() {
+    local local_path="$1"
+    local extra_flags="$2"
+
+    if [[ -d "$local_path" ]]; then
+        local remote_dir="${REMOTE}${REMOTE_ROOT}${local_path}"
+        echo "Action: Syncing Directory: $local_path"
+        rclone bisync "$remote_dir" "$local_path" --create-empty-src-dirs --verbose $COMPARE_FLAGS $extra_flags
+        
+    elif [[ -f "$local_path" ]]; then
+        local parent_dir=$(dirname "$local_path")
+        local filename=$(basename "$local_path")
+        local remote_dir="${REMOTE}${REMOTE_ROOT}${parent_dir}"
+        echo "Action: Syncing File: $local_path"
+        rclone bisync "$remote_dir" "$parent_dir" --include "/$filename" --create-empty-src-dirs --verbose $COMPARE_FLAGS $extra_flags
+    else
+        echo "Error: '$local_path' not found or invalid."
+        return 1
+    fi
+}
+
+# --- Functions ---
+
+add_path() {
+    local path=$(realpath "$1")
+    [[ ! -e "$path" ]] && echo "Error: Path does not exist." && exit 1
+    
+    yq -i ".paths |= (. + [\"$path\"] | unique)" "$CONFIG_FILE"
+    echo "Success: Added '$path' to config."
+}
+
+remove_path() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: gdrive remove <path>"
+        exit 1
+    fi
+    local path=$(realpath "$1")
+
+    # Check if path exists in the YAML list
+    if yq -e ".paths[] | select(. == \"$path\")" "$CONFIG_FILE" >/dev/null 2>&1; then
+        yq -i ".paths |= del(.[] | select(. == \"$path\"))" "$CONFIG_FILE"
+        echo "Success: Removed '$path' from sync config."
+        echo "Note: This did NOT delete any files from Google Drive or your local machine."
+    else
+        echo "Error: '$path' is not in the sync list."
+    fi
+}
+
+resync_path() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: gdrive resync <path>"
+        exit 1
+    fi
+    local path=$(realpath "$1")
+    
+    echo "Performing INITIAL resync for: $path"
+    do_sync "$path" "--resync"
+    
+    if ! yq -e ".paths[] | select(. == \"$path\")" "$CONFIG_FILE" >/dev/null 2>&1; then
+        read -p "Path not in config. Add it now? (y/n) " -n 1 -r
+        echo
+        [[ $REPLY =~ ^[Yy]$ ]] && add_path "$path"
+    fi
+}
+
+sync_all() {
+    local paths=$(yq '.paths[]' "$CONFIG_FILE" 2>/dev/null)
+    [[ -z "$paths" ]] && echo "No paths in config. Use 'gdrive add' first." && exit 0
+
+    echo "Starting Google Drive Sync..."
+    while read -r path; do
+        [[ -z "$path" ]] && continue
+        do_sync "$path" "" || echo "Tip: Use 'gdrive resync $path' if this is the first run."
+        echo "---"
+    done <<< "$paths"
+}
+
+# --- Main Logic ---
+
+case "$1" in
+    add)     add_path "$2" ;;
+    remove)  remove_path "$2" ;;
+    sync)    sync_all ;;
+    resync)  resync_path "$2" ;;
+    list)  yq '.' "$CONFIG_FILE" ;;
+    *)
+        echo "gdrive CLI — easily sync files to Google Drive."
+        echo "  gdrive add <path>    : Add path to config"
+        echo "  gdrive remove <path> : Remove path from config"
+        echo "  gdrive sync          : Sync all configured paths"
+        echo "  gdrive resync <path> : Force a first-time/full resync for a specific path"
+        echo "  gdrive list          : List configured paths"
+        exit 1
+        ;;
+esac
