@@ -6,7 +6,7 @@ CONFIG_FILE="$CONFIG_DIR/config.yml"
 REMOTE="gdrive:"
 
 # Recommended comparison flags for reliability
-COMPARE_FLAGS="--compare size,modtime,checksum --modify-window 1s"
+COMPARE_FLAGS="--compare size,modtime --modify-window 1s"
 
 # Ensure config directory and valid YAML file exist
 mkdir -p "$CONFIG_DIR"
