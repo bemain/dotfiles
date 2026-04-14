@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Mario Kart 8 Deluxe (on Switch)
+Exec=/usr/bin/flatpak run io.github.ryubing.Ryujinx "/var/home/agardh/Games/Switch/Mario Kart 8/Mario Kart 8 Deluxe (Base).xci"
+Icon=ryujinx
+Type=Application
+StartupNotify=false
+Categories=Games;

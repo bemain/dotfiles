@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Boomerang Fu (on Switch)
+Exec=/usr/bin/flatpak run io.github.ryubing.Ryujinx "/var/home/agardh/Games/Switch/Boomerang Fu/Boomerang Fu (Base).nsp"
+Icon=ryujinx
+Type=Application
+StartupNotify=false
+Categories=Games;

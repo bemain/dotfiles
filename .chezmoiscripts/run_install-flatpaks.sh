@@ -38,6 +38,8 @@ FLATPAK_APP_IDS=(
     "org.musescore.MuseScore"
     "org.prismlauncher.PrismLauncher" # Minecraft
     "com.google.AndroidStudio"
+    "io.github.ryubing.Ryujinx" # Switch emulator
+    "net.rpcs3.RPCS3" # PS3 emulator
 )
 
 # Set to 'true' if you want installations to be system-wide (requires sudo).
