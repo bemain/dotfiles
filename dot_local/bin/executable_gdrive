@@ -6,7 +6,7 @@ CONFIG_FILE="$CONFIG_DIR/config.yml"
 REMOTE="gdrive:"
 
 # Recommended comparison flags for reliability
-COMPARE_FLAGS="--compare size,modtime --modify-window 1s"
+BISYNC_FLAGS="--create-empty-src-dirs --verbose --compare size,modtime --modify-window 1s --drive-skip-gdocs"
 
 # Ensure config directory and valid YAML file exist
 mkdir -p "$CONFIG_DIR"
@@ -24,7 +24,7 @@ do_sync() {
 
     if [[ -d "$local_path" ]]; then
         echo "Action: Syncing Directory [$local_path] <-> [$remote_full_path]"
-        rclone bisync "$remote_full_path" "$local_path" --create-empty-src-dirs --verbose $COMPARE_FLAGS $extra_flags
+        rclone bisync "$remote_full_path" "$local_path" $BISYNC_FLAGS $extra_flags
         
     elif [[ -f "$local_path" ]]; then
         local parent_dir=$(dirname "$local_path")
@@ -36,7 +36,7 @@ do_sync() {
         local remote_full_parent="${REMOTE}${remote_parent}"
 
         echo "Action: Syncing File [$local_path] <-> [${REMOTE}${remote_subpath}]"
-        rclone bisync "$remote_full_parent" "$parent_dir" --include "/$filename" --create-empty-src-dirs --verbose $COMPARE_FLAGS $extra_flags
+        rclone bisync "$remote_full_parent" "$parent_dir" --include "/$filename" $BISYNC_FLAGS $extra_flags
     else
         echo "Error: Local path '$local_path' not found."
         return 1
