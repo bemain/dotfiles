@@ -1,2 +1,9 @@
-paths:
-  - /var/home/agardh/Games
+targets:
+  - local: /var/home/agardh/Games/PS3
+    remote: Datorspel/PS3
+  - local: /var/home/agardh/Games/Switch
+    remote: Datorspel/Switch
+  - local: /var/home/agardh/.var/app/io.github.ryubing.Ryujinx/config/Ryujinx/bis/user/save
+    remote: Datorspel/Saves/Ryujinx
+  - local: /var/home/agardh/.var/app/net.rpcs3.RPCS3/config/rpcs3/dev_hdd0/game
+    remote: Datorspel/Saves/RPCS3/game

@@ -1,0 +1,13 @@
+[Unit]
+Description=Automatically sync to Google Drive
+Documentation=man:gdrive(1)
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/var/home/agardh/.local/bin/gdrive sync
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
