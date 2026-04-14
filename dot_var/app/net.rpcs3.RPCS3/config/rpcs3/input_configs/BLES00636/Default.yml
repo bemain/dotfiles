@@ -87,9 +87,9 @@ Player 1 Input:
     Right Stick Lerp Factor: 100
     Analog Button Lerp Factor: 100
     Trigger Lerp Factor: 100
-    Device Class Type: 0
-    Vendor ID: 1356
-    Product ID: 616
+    Device Class Type: 1
+    Vendor ID: 4794
+    Product ID: 256
   Buddy Device: ""
 Player 2 Input:
   Handler: SDL
