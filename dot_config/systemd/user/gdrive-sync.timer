@@ -2,11 +2,11 @@
 Description=Timer for automatically syncing to Google Drive
 
 [Timer]
-# Run daily at 3:00 AM
-OnCalendar=daily
+# Run every 2 hours
+OnCalendar=0/2:00
 
-# Randomize the start time by up to 1 hour to avoid thundering herd problem
-RandomizedDelaySec=1h
+# Randomize the start time to avoid thundering herd problem
+RandomizedDelaySec=5m
 
 # Ensure the service runs shortly after boot if the scheduled time was missed
 Persistent=true

@@ -14,6 +14,15 @@ if [[ ! -f "$CONFIG_FILE" ]]; then
     echo "targets: []" > "$CONFIG_FILE"
 fi
 
+yq() {
+	distrobox enter fedora -- yq "$@"
+}
+
+rclone() {
+	distrobox enter fedora -- rclone "$@"
+}
+
+
 # --- Helper: Perform Sync ---
 do_sync() {
     local local_path="$1"
