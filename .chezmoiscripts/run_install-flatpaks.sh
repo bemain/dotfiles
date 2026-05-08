@@ -60,6 +60,10 @@ echo "Ensuring Flathub remote is added."
 
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo "${FLATPAK_SCOPE_FLAG}"
 
+echo "Ensuring bemain remote is added."
+
+flatpak remote-add --if-not-exists bemain https://bemain.github.io/flatpaks/index.flatpakrepo "${FLATPAK_SCOPE_FLAG}"
+
 echo "Checking which Flatpak apps need to be (re)installed."
 
 INSTALL_APPS=()
