@@ -12,4 +12,6 @@ targets:
   - local: /var/home/agardh/.var/app/io.github.ryubing.Ryujinx/config/Ryujinx
     remote: Datorspel/Saves/Ryujinx
   - local: /var/home/agardh/.var/app/net.rpcs3.RPCS3/config/rpcs3
-    remote: Datorspel/Saves/RPCS3/game
+    remote: Datorspel/Saves/RPCS3
+  - local: /var/home/agardh/Documents/Clone Hero/Songs
+    remote: Datorspel/Saves/Clone Hero
