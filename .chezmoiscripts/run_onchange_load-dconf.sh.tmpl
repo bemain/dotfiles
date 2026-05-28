@@ -1,0 +1,17 @@
+#!/bin/bash
+# chezmoi:template:left-delimiter="[[" right-delimiter="]]"
+
+# Load dconf from the dump file
+
+[[ $dconfIniRelPath := "dot_config/dconf/user.conf" ]]
+
+# Makes this script run every time the dconf file changes
+# dconf.ini hash: [[ include $dconfIniRelPath | sha256sum ]]
+
+# Replace the placeholder with the actual ID of the distrobox 'fedora' for the Ptyxis profile
+FEDORA_CONTAINER_ID="$(podman ps -a --filter name=fedora --format '{{.ID}}' --no-trunc)"
+USER_CONF=$(sed -e "s/my-fedora-distrobox/${FEDORA_CONTAINER_ID}/" "[[ joinPath .chezmoi.sourceDir $dconfIniRelPath ]]")
+
+echo "Loading changed dconf/gnome settings"
+
+printf "$USER_CONF" | dconf load /
