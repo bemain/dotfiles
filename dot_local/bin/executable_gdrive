@@ -9,10 +9,15 @@ CONFIG_FILE="$CONFIG_DIR/config.yml"
 REMOTE="gdrive:"
 
 # Rclone comparison flags for reliability
-BISYNC_FLAGS="--create-empty-src-dirs --verbose --compare size,modtime --modify-window 1s --drive-skip-gdocs"
+BISYNC_FLAGS="--create-empty-src-dirs --compare size,modtime --modify-window 1s --drive-skip-gdocs"
 
 # Global flags for the current session
 SESSION_FLAGS=""
+VERBOSE=false
+
+RED='\033[0;31m'
+BOLD='\033[1m'
+NC='\033[0m'
 
 # Ensure config directory and valid YAML file exist
 mkdir -p "$CONFIG_DIR"
@@ -33,10 +38,14 @@ rclone() {
 send_notification() {
     local title="$1"
     local message="$2"
+    local urgency="${3:-normal}"
     if command -v notify-send >/dev/null 2>&1; then
-        notify-send -i cloud-error "Google Drive Sync" "$message"
+        notify-send --app-name="gdrive" --urgency="$urgency" --icon=google-drive "$title" "$message"
     fi
 }
+
+# In non-verbose mode, stores error lines from the last rclone run
+LAST_SYNC_ERRORS=""
 
 # --- Helper: Perform Sync ---
 do_sync() {
@@ -45,12 +54,23 @@ do_sync() {
     local extra_flags="$3"
 
     local remote_full_path="${REMOTE}${remote_subpath}"
-    local all_flags="$BISYNC_FLAGS $SESSION_FLAGS $extra_flags"
+    local verbose_flag=""
+    [[ "$VERBOSE" == true ]] && verbose_flag="--verbose"
+    local all_flags="$BISYNC_FLAGS $SESSION_FLAGS $extra_flags $verbose_flag"
+
+    LAST_SYNC_ERRORS=""
 
     if [[ -d "$local_path" ]]; then
-        echo "Action: Syncing Directory [$local_path] <-> [$remote_full_path]"
-        rclone bisync "$remote_full_path" "$local_path" $all_flags
-        
+        if [[ "$VERBOSE" == true ]]; then
+            echo "Action: Syncing Directory [$local_path] <-> [$remote_full_path]"
+            rclone bisync "$remote_full_path" "$local_path" $all_flags
+        else
+            local output exit_code
+            output=$(rclone bisync "$remote_full_path" "$local_path" $all_flags 2>&1)
+            exit_code=$?
+            LAST_SYNC_ERRORS=$(printf '%s\n' "$output" | grep -E " (ERROR|FATAL) ")
+            return $exit_code
+        fi
     elif [[ -f "$local_path" ]]; then
         local parent_dir=$(dirname "$local_path")
         local filename=$(basename "$local_path")
@@ -58,11 +78,28 @@ do_sync() {
         [[ "$remote_parent" == "." ]] && remote_parent=""
         local remote_full_parent="${REMOTE}${remote_parent}"
 
-        echo "Action: Syncing File [$local_path] <-> [${REMOTE}${remote_subpath}]"
-        rclone bisync "$remote_full_parent" "$parent_dir" --include "/$filename" $all_flags
+        if [[ "$VERBOSE" == true ]]; then
+            echo "Action: Syncing File [$local_path] <-> [${REMOTE}${remote_subpath}]"
+            rclone bisync "$remote_full_parent" "$parent_dir" --include "/$filename" $all_flags
+        else
+            local output exit_code
+            output=$(rclone bisync "$remote_full_parent" "$parent_dir" --include "/$filename" $all_flags 2>&1)
+            exit_code=$?
+            LAST_SYNC_ERRORS=$(printf '%s\n' "$output" | grep -E " (ERROR|FATAL) ")
+            return $exit_code
+        fi
     else
         echo "Error: Local path '$local_path' not found."
         return 1
+    fi
+}
+
+# --- Helper: Print captured errors from last do_sync (non-verbose mode) ---
+print_errors() {
+    if [[ -n "$LAST_SYNC_ERRORS" ]]; then
+        while IFS= read -r line; do
+            printf "    ${RED}%s${NC}\n" "$line"
+        done <<< "$LAST_SYNC_ERRORS"
     fi
 }
 
@@ -78,10 +115,10 @@ add_path() {
     local remote_path="${2:-$(basename "$local_path")}"
 
     [[ ! -e "$local_path" ]] && echo "Error: Local path does not exist." && exit 1
-    
+
     yq -i ".targets += [{\"local\": \"$local_path\", \"remote\": \"$remote_path\"}]" "$CONFIG_FILE"
     yq -i ".targets |= unique_by(.local)" "$CONFIG_FILE"
-    
+
     echo "Success: Added mapping:"
     echo "  Local:  $local_path"
     echo "  Remote: $REMOTE$remote_path"
@@ -105,7 +142,7 @@ forget_path() {
         done
 
         read -p "Enter number (or 'q' to cancel): " choice
-        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -le "$count" ]; then
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$count" ]; then
             local index=$((choice-1))
             local_path=$(yq ".targets[$index].local" "$CONFIG_FILE")
         else
@@ -127,33 +164,74 @@ forget_path() {
 sync_all() {
     local flag="$1"
     local count=$(yq '.targets | length' "$CONFIG_FILE")
-    local success=true
-    
+    local failed=0
+    local failed_paths=()
+
     if [[ "$count" -eq 0 ]]; then
         echo "No paths in config. Use 'gdrive add' first."
         exit 0
     fi
 
     echo "Starting Google Drive Sync ($count targets)..."
+
     for ((i=0; i<$count; i++)); do
         local lp=$(yq ".targets[$i].local" "$CONFIG_FILE")
         local rp=$(yq ".targets[$i].remote" "$CONFIG_FILE")
-        if ! do_sync "$lp" "$rp" "$flag"; then
-            echo "Tip: Use 'gdrive resync $lp' if this is the first run."
-            success=false
+
+        if [[ "$VERBOSE" == true ]]; then
+            if ! do_sync "$lp" "$rp" "$flag"; then
+                printf 'Tip: Use gdrive resync %q if this is the first run.\n' "$lp"
+                failed_paths+=("$lp")
+                ((failed++))
+            fi
+            echo "---"
+        else
+            printf "  [%d/%d] %s ... " "$((i+1))" "$count" "$lp"
+            if do_sync "$lp" "$rp" "$flag"; then
+                printf "OK\n"
+            else
+                printf "${RED}FAILED${NC}\n"
+                print_errors
+                printf '    Tip: Use gdrive resync %q if this is the first run.\n' "$lp"
+                failed_paths+=("$lp")
+                ((failed++))
+            fi
         fi
-        echo "---"
     done
 
-    if [ "$success" = false ]; then
-        send_notification "Sync Warning" "One or more sync targets failed to complete."
+    if [[ "$VERBOSE" != true ]]; then
+        echo ""
+        if [[ $failed -eq 0 ]]; then
+            printf "${BOLD}Done.${NC} All $count target(s) synced successfully.\n"
+        else
+            printf "${BOLD}Done.${NC} ${RED}$failed/$count target(s) failed.${NC}\n"
+        fi
+    fi
+
+    if [[ $failed -gt 0 ]]; then
+        local body
+        if [[ $failed -eq 1 ]]; then
+            body="Failed to sync: ${failed_paths[0]}"
+        else
+            body="$failed of $count targets failed:"$'\n'
+            for p in "${failed_paths[@]}"; do
+                body+="• $p"$'\n'
+            done
+            body="${body%$'\n'}"
+        fi
+        send_notification "Google Drive Sync Failed" "$body" "critical"
+        return 1
     fi
 }
 
 resync_path() {
     local target="$1"
     if [[ -z "$target" ]]; then
-        echo "Performing INITIAL resync for ALL paths..."
+        if [[ "$VERBOSE" == true ]]; then
+            echo "Performing INITIAL resync for ALL paths..."
+        else
+            echo "Starting initial resync for all targets..."
+        fi
         sync_all "--resync"
     else
         local local_path=$(realpath "$target")
@@ -164,9 +242,20 @@ resync_path() {
             exit 1
         fi
 
-        echo "Performing INITIAL resync for [$local_path]..."
-        if ! do_sync "$local_path" "$remote_path" "--resync"; then
-            send_notification "Resync Failed" "Could not complete resync for $local_path"
+        if [[ "$VERBOSE" == true ]]; then
+            echo "Performing INITIAL resync for [$local_path]..."
+            if ! do_sync "$local_path" "$remote_path" "--resync"; then
+                send_notification "Google Drive Resync Failed" "$local_path" "critical"
+            fi
+        else
+            printf "Resyncing %s ... " "$local_path"
+            if do_sync "$local_path" "$remote_path" "--resync"; then
+                printf "OK\n"
+            else
+                printf "${RED}FAILED${NC}\n"
+                print_errors
+                send_notification "Google Drive Resync Failed" "$local_path" "critical"
+            fi
         fi
     fi
 }
@@ -178,16 +267,20 @@ CMD_ARGS=()
 
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
+        -v|--verbose)
+            VERBOSE=true
+            shift
+            ;;
         -d|--dry-run)
-            SESSION_FLAGS="$SESSION_FLAGS --dry-run"
+            SESSION_FLAGS="${SESSION_FLAGS:+$SESSION_FLAGS }--dry-run"
             shift
             ;;
         --prefer-local)
-            SESSION_FLAGS="$SESSION_FLAGS --conflict-resolve prefer-path2"
+            SESSION_FLAGS="${SESSION_FLAGS:+$SESSION_FLAGS }--conflict-resolve prefer-path2"
             shift
             ;;
         --prefer-remote)
-            SESSION_FLAGS="$SESSION_FLAGS --conflict-resolve prefer-path1"
+            SESSION_FLAGS="${SESSION_FLAGS:+$SESSION_FLAGS }--conflict-resolve prefer-path1"
             shift
             ;;
         *)
@@ -212,6 +305,7 @@ case "$COMMAND" in
         echo "Usage: gdrive [flags] <command> [args]"
         echo ""
         echo "Flags:"
+        echo "  -v, --verbose        : Show full rclone output"
         echo "  -d, --dry-run        : See what would happen without making changes"
         echo "  --prefer-local       : Resolve conflicts by keeping local version"
         echo "  --prefer-remote      : Resolve conflicts by keeping remote version"
