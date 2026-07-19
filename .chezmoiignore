@@ -10,4 +10,4 @@ dconf/
 .config/MuseScore/MuseScore4.ini
 
 # Bitwarden
-dot_var/app/com.bitwarden.desktop/config/Bitwarden/private_data.json
+.var/app/com.bitwarden.desktop/config/Bitwarden/data.json
