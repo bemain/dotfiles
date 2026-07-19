@@ -1,5 +1,22 @@
 {
   "theme": "dark",
+  "skillListingBudgetFraction": 0.015,
+  "skillOverrides": {
+    "article-writing": "name-only",
+    "brand-voice": "name-only",
+    "market-research": "name-only",
+    "product-lens": "name-only",
+    "strategy-advisor": "name-only",
+    "python-patterns": "name-only",
+    "python-testing": "name-only",
+    "ai-regression-testing": "name-only",
+    "documentation-lookup": "name-only",
+    "deep-research": "name-only",
+    "graphify": "name-only",
+    "technical-writer": "name-only",
+    "docker-patterns": "name-only",
+    "mcp-server-patterns": "name-only"
+  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
