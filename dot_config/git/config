@@ -4,6 +4,7 @@
 [user]
 	name = bemain
 	email = bemain.dev@gmail.com
+	signingkey = ~/.ssh/id_default.pub
 
 [gpg]
 	format = ssh
@@ -29,6 +30,7 @@
 
 [core]
     excludesFile = $HOME/.config/git/ignore
+    sshCommand = ssh -i ~/.ssh/id_default.pub -o IdentitiesOnly=yes
 
 [alias]
 	# Undo last commit but keep changes

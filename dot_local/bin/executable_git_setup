@@ -1,34 +1,42 @@
 #!/usr/bin/env bash
 
-# 1. Check if we are actually in a git repo
+# Locally override name/email/SSH key for this repo, overriding the global defaults.
+# Run with --reset to remove the override and fall back to global defaults again.
+
 if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-    echo "Error: You are not inside a Git repository."
-    return 1
+    echo "Error: You are not inside a Git repository." >&2
+    exit 1
+fi
+
+if [ "$1" == "--reset" ]; then
+    git config --local --unset user.name 2>/dev/null
+    git config --local --unset user.email 2>/dev/null
+    git config --local --unset core.sshCommand 2>/dev/null
+    git config --local --unset user.signingkey 2>/dev/null
+    echo "Reset to global defaults: $(git config user.name) <$(git config user.email)>"
+    exit 0
 fi
 
 echo "--- Repository Configuration ---"
 
-# 2. Prompt for Identity (Defaults to current config if exists)
 CURRENT_NAME=$(git config user.name)
 CURRENT_EMAIL=$(git config user.email)
 
-read -p "Enter Name [Current: $CURRENT_NAME]: " GIT_NAME
-read -p "Enter Email [Current: $CURRENT_EMAIL]: " GIT_EMAIL
+read -p "Name [$CURRENT_NAME]: " GIT_NAME
+read -p "Email [$CURRENT_EMAIL]: " GIT_EMAIL
 
-# Use input or fallback to current if empty
-git config user.name "${GIT_NAME:-$CURRENT_NAME}"
-git config user.email "${GIT_EMAIL:-$CURRENT_EMAIL}"
+git config --local user.name "${GIT_NAME:-$CURRENT_NAME}"
+git config --local user.email "${GIT_EMAIL:-$CURRENT_EMAIL}"
 
-# 3. Handle SSH Keys from Bitwarden Agent
 echo -e "\nFetching keys from Bitwarden agent..."
 mapfile -t keys < <(ssh-add -L)
 
 if [ ${#keys[@]} -eq 0 ]; then
-    echo "No keys found in Bitwarden agent. Is your vault unlocked?"
-    return 1
+    echo "No keys found in Bitwarden agent. Is your vault unlocked?" >&2
+    exit 1
 fi
 
-echo "Select the Bitwarden SSH key for this repo:"
+echo "Select the SSH key for this repo:"
 select key in "${keys[@]}"; do
     if [ -n "$key" ]; then
         # Store the public key reference inside the .git folder
@@ -36,19 +44,14 @@ select key in "${keys[@]}"; do
         PUBKEY_PATH="$(git rev-parse --show-toplevel)/.git/id_bw.pub"
         echo "$key" > "$PUBKEY_PATH"
 
-        # Force this repo to use ONLY this key for SSH connections
-        git config core.sshCommand "ssh -i $PUBKEY_PATH -o IdentitiesOnly=yes"
-        
-        # Configure Signing
-        git config user.signingkey "$PUBKEY_PATH"
-        git config gpg.format ssh
-        git config commit.gpgsign true
+        git config --local core.sshCommand "ssh -i $PUBKEY_PATH -o IdentitiesOnly=yes"
+        git config --local user.signingkey "$PUBKEY_PATH"
 
         echo -e "\nDone! Configured as:"
         echo "  User: $(git config user.name) <$(git config user.email)>"
         echo "  Key: ${key:0:30}..."
         break
     else
-        echo "Invalid selection."
+        echo "Invalid selection." >&2
     fi
 done
