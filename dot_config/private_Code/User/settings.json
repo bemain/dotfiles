@@ -5,7 +5,6 @@
         "reportUnusedImport": "information",
     },
     "editor.fontFamily": "MesloLGS NF",
-    "editor.bracketPairColorization.enabled": false,
     "dev.containers.dockerPath": "/app/tools/podman/bin/podman-remote",
     "terminal.integrated.defaultProfile.linux": "zsh",
     "terminal.integrated.fontFamily": "MesloLGS NF",
@@ -61,5 +60,29 @@
     "git.enableCommitSigning": false,
     "git.replaceTagsWhenPull": true,
     "geminicodeassist.inlineSuggestions.enableAuto": false,
-    "workbench.colorTheme": "Gruvbox Material Dark",
+    "workbench.editorAssociations": {
+        "*.copilotmd": "vscode.markdown.preview.editor",
+        "{git,gitlens,chat-editing-snapshot-text-model,copilot,git-graph,git-graph-3}:/**/*.qrc": "default",
+        "*.qrc": "qt-core.qrcEditor"
+    },
+    "qt-core.additionalQtPaths": [
+        {
+            "name": "Qt-6.10.3-linux-g++-x86_64_from_PATH",
+            "path": "/usr/bin/qmake"
+        }
+    ],
+    "nrf-connect.enableTelemetry": false,
+    "nrf-connect.sdkManager.region": "default",
+    "claudeCode.preferredLocation": "panel",
+    "workbench.secondarySideBar.defaultVisibility": "hidden",
+    "dart.flutterCreatePlatforms": [
+        "linux",
+        "macos",
+        "windows",
+        "web"
+    ],
+    "gitlens.ai.model": "vscode",
+    "gitlens.ai.vscode.model": "copilotcli:",
+    "editor.bracketPairColorization.enabled": false,
+    "workbench.secondarySideBar.showLabels": false,
 }
