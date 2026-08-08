@@ -15,3 +15,10 @@
     url = "https://github.com/romkatv/powerlevel10k/archive/v1.20.0.tar.gz"
     exact = true
     stripComponents = 1
+[".local/share/gnome-shell/extensions/gjsosk@vishram1123.com"]
+    # Always resolves to the newest GJS OSK build compatible with this shell
+    # version. Bump shell_version after a major GNOME upgrade.
+    type = "archive"
+    url = "https://extensions.gnome.org/download-extension/gjsosk@vishram1123.com.shell-extension.zip?shell_version=50"
+    exact = true
+    refreshPeriod = "168h"
