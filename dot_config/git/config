@@ -3,7 +3,7 @@
 
 [user]
 	name = bemain
-	email = bemain.dev@gmail.com
+	email = benjamin.agardh@gmail.com
 	signingkey = ~/.ssh/id_default.pub
 
 [gpg]
