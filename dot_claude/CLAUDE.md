@@ -21,12 +21,22 @@
 ## Code Style
 
 - No comments unless the WHY is non-obvious.
+- Comment the current state only, not changes made. The git log contains that.
 - No error handling for scenarios that cannot happen.
 - No features beyond what the task requires.
 
 ## Rules
 
-Language- and framework-specific rules live in `rules/`. Claude Code auto-loads any `.md` files found there.
+Language- and framework-specific rules live in `rules/`, discovered recursively. A rule with no
+frontmatter loads every session; one with `paths:` frontmatter loads only when a matching file is
+read, so scope anything language-specific that way.
+
+```markdown
+---
+paths:
+  - "**/*.dart"
+---
+```
 
 ## Agents
 
