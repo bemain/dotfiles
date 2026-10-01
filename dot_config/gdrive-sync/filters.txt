@@ -1,0 +1,5 @@
+# rclone filter rules applied to every gdrive target.
+# bisync requires a resync of all targets after this file changes.
+- .venv/**
+- node_modules/**
+- __pycache__/**

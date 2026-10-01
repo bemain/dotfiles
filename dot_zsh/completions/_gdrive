@@ -1,0 +1,48 @@
+#compdef gdrive
+
+_gdrive_targets() {
+    local config="$HOME/.config/gdrive-sync/config.yml"
+    [[ -f "$config" ]] || return
+    local -a targets
+    targets=(${(f)"$(sed -n 's/^[[:space:]]*-\{0,1\}[[:space:]]*local:[[:space:]]*"\{0,1\}\([^"]*\)"\{0,1\}[[:space:]]*$/\1/p' "$config")"})
+    compadd -a targets
+}
+
+_gdrive() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(-v --verbose)'{-v,--verbose}'[show full rclone output]' \
+        '(-d --dry-run)'{-d,--dry-run}'[show what would happen without making changes]' \
+        '(--prefer-remote)--prefer-local[resolve conflicts by keeping local version]' \
+        '(--prefer-local)--prefer-remote[resolve conflicts by keeping remote version]' \
+        '1:command:->command' \
+        '*::arg:->args'
+
+    case $state in
+        command)
+            local -a commands
+            commands=(
+                'add:add path to config'
+                'forget:remove path from config'
+                'sync:sync one configured path (defaults to all paths)'
+                'resync:force resync (defaults to all paths)'
+                'list:list configured paths'
+            )
+            _describe 'command' commands
+            ;;
+        args)
+            case $line[1] in
+                add)
+                    _arguments '1:local path:_files' '2:remote path:'
+                    ;;
+                forget|sync|resync)
+                    _arguments '1:configured path:_gdrive_targets'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_gdrive "$@"

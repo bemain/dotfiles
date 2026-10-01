@@ -81,6 +81,9 @@ zstyle ':omz:update' mode disabled  # disable automatic updates
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-syntax-highlighting)
 
+# Outside ~/.oh-my-zsh because chezmoi manages that directory as an exact external
+fpath=("$HOME/.zsh/completions" $fpath)
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
