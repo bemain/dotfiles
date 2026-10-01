@@ -39,9 +39,12 @@ echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com
 # Add Chezmoi Copr repository
 sudo dnf copr enable -y lihaohong/chezmoi
 
+# Add Zed Copr repository
+sudo dnf copr enable -y che/zed
+
 # Install packages
 sudo dnf check-update -y
-sudo dnf install -y code chezmoi
+sudo dnf install -y code chezmoi zed
 
 # Install Flutter
 sudo mkdir /usr/local/flutter
