@@ -1,0 +1,64 @@
+"$schema" = "https://starship.rs/config-schema.json"
+
+# Styled after the powerlevel10k "classic" prompt (colors are xterm-256 indices).
+# $character sits on the right because it is the only module with separate success/error styles.
+add_newline = true
+format = """
+[╭─](240)[](fg:236)$directory($git_branch$git_status[ ](bg:236))[](fg:236)\
+$fill\
+[](fg:236)$status$character$cmd_duration$jobs$container[](fg:236)[─╮](240)
+[╰─](240) """
+right_format = "[─╯](240)"
+
+[fill]
+symbol = " "
+
+[directory]
+style = "fg:31 bg:236"
+before_repo_root_style = "fg:31 bg:236"
+repo_root_style = "bold fg:39 bg:236"
+read_only_style = "fg:160 bg:236"
+format = "[ $path ]($style)[$read_only]($read_only_style)"
+repo_root_format = "[ $before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path ]($style)[$read_only]($read_only_style)"
+truncation_length = 3
+fish_style_pwd_dir_length = 1
+truncate_to_repo = false
+truncation_symbol = "…/"
+
+[git_branch]
+style = "fg:76 bg:236"
+format = "[│ ](fg:244 bg:236)[$branch]($style)"
+
+[git_status]
+format = "$ahead_behind$stashed$conflicted$staged$modified$untracked"
+ahead = "[ ⇡$count](fg:76 bg:236)"
+behind = "[ ⇣$count](fg:76 bg:236)"
+diverged = "[ ⇣$behind_count⇡$ahead_count](fg:76 bg:236)"
+stashed = "[ *$count](fg:76 bg:236)"
+conflicted = "[ ~$count](fg:196 bg:236)"
+staged = "[ +$count](fg:178 bg:236)"
+modified = "[ !$count](fg:178 bg:236)"
+untracked = "[ ?$count](fg:39 bg:236)"
+
+[status]
+disabled = false
+style = "fg:160 bg:236"
+format = "[ $status]($style)"
+
+[character]
+format = "$symbol"
+success_symbol = "[ ✔ ](fg:70 bg:236)"
+error_symbol = "[ ✘ ](fg:160 bg:236)"
+
+[cmd_duration]
+min_time = 3_000
+style = "fg:248 bg:236"
+format = "[│](fg:244 bg:236)[ $duration  ]($style)"
+
+[jobs]
+style = "fg:37 bg:236"
+format = "[│](fg:244 bg:236)[ $number  ]($style)"
+
+[container]
+style = "fg:178 bg:236"
+format = "[│](fg:244 bg:236)[ $name  ]($style)"

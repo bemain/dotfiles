@@ -2,10 +2,6 @@ README.md
 distrobox/
 dconf/
 
-# Oh my zsh
-.oh-my-zsh/cache/
-.oh-my-zsh/**/*.zwc
-
 # MuseScore
 .config/MuseScore/MuseScore4.ini
 
