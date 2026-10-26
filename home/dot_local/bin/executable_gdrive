@@ -8,11 +8,22 @@ CONFIG_DIR="$HOME/.config/gdrive-sync"
 CONFIG_FILE="$CONFIG_DIR/config.yml"
 REMOTE="gdrive:"
 
+LOCK_FILE="${XDG_RUNTIME_DIR:-/tmp}/gdrive-sync.lock"
+
 # Rclone comparison flags for reliability
-BISYNC_FLAGS="--create-empty-src-dirs --compare size,modtime --modify-window 1s --drive-skip-gdocs --resilient --recover --max-lock 2m --filters-file $CONFIG_DIR/filters.txt"
+BISYNC_FLAGS=(
+    --create-empty-src-dirs
+    --compare size,modtime
+    --modify-window 1s
+    --drive-skip-gdocs
+    --resilient
+    --recover
+    --max-lock 2m
+    --filters-file "$CONFIG_DIR/filters.txt"
+)
 
 # Global flags for the current session
-SESSION_FLAGS=""
+SESSION_FLAGS=()
 VERBOSE=false
 
 RED='\033[0;31m'
@@ -42,6 +53,26 @@ from_config_path() {
     fi
 }
 
+# Values reach yq through the environment so quotes and backslashes in paths
+# cannot break the expression.
+has_target() {
+    CFG_LOCAL="$1" yq -e '.targets[] | select(.local == strenv(CFG_LOCAL))' "$CONFIG_FILE" >/dev/null 2>&1
+}
+
+remote_for() {
+    CFG_LOCAL="$1" yq '.targets[] | select(.local == strenv(CFG_LOCAL)) | .remote' "$CONFIG_FILE"
+}
+
+# Serializes syncs so a manual run waits for the timer's run instead of
+# failing on bisync's lock file.
+acquire_sync_lock() {
+    exec 9>"$LOCK_FILE"
+    if ! flock -n 9; then
+        echo "Waiting for another gdrive sync to finish..."
+        flock 9
+    fi
+}
+
 # --- Helper: Desktop Notifications ---
 send_notification() {
     local title="$1"
@@ -60,11 +91,11 @@ LAST_SYNC_ERRORS=""
 do_sync() {
     local local_path="$1"
     local remote_subpath="$2"
-    local extra_flags="$3"
+    local extra_flag="$3"
 
-    local verbose_flag=""
-    [[ "$VERBOSE" == true ]] && verbose_flag="--verbose"
-    local all_flags="$BISYNC_FLAGS $SESSION_FLAGS $extra_flags $verbose_flag"
+    local all_flags=("${BISYNC_FLAGS[@]}" "${SESSION_FLAGS[@]}")
+    [[ -n "$extra_flag" ]] && all_flags+=("$extra_flag")
+    [[ "$VERBOSE" == true ]] && all_flags+=(--verbose)
 
     LAST_SYNC_ERRORS=""
 
@@ -89,12 +120,12 @@ do_sync() {
 
     if [[ "$VERBOSE" == true ]]; then
         echo "Action: Syncing $kind [$local_path] <-> [${REMOTE}${remote_subpath}]"
-        rclone bisync "$src" "$dst" "${filter[@]}" $all_flags
+        rclone bisync "$src" "$dst" "${filter[@]}" "${all_flags[@]}"
         return
     fi
 
     local output exit_code
-    output=$(rclone bisync "$src" "$dst" "${filter[@]}" $all_flags 2>&1)
+    output=$(rclone bisync "$src" "$dst" "${filter[@]}" "${all_flags[@]}" 2>&1)
     exit_code=$?
     LAST_SYNC_ERRORS=$(printf '%s\n' "$output" | grep -E " (ERROR|FATAL) ")
     if [[ $exit_code -ne 0 && -z "$LAST_SYNC_ERRORS" ]]; then
@@ -125,10 +156,16 @@ add_path() {
 
     [[ ! -e "$local_path" ]] && echo "Error: Local path does not exist." && exit 1
 
-    yq -i ".targets += [{\"local\": \"$(to_config_path "$local_path")\", \"remote\": \"$remote_path\"}]" "$CONFIG_FILE"
-    yq -i ".targets |= unique_by(.local)" "$CONFIG_FILE"
-
-    echo "Success: Added mapping:"
+    local config_path=$(to_config_path "$local_path")
+    if has_target "$config_path"; then
+        CFG_LOCAL="$config_path" CFG_REMOTE="$remote_path" \
+            yq -i '(.targets[] | select(.local == strenv(CFG_LOCAL)) | .remote) = strenv(CFG_REMOTE)' "$CONFIG_FILE"
+        echo "Success: Updated mapping:"
+    else
+        CFG_LOCAL="$config_path" CFG_REMOTE="$remote_path" \
+            yq -i '.targets += [{"local": strenv(CFG_LOCAL), "remote": strenv(CFG_REMOTE)}]' "$CONFIG_FILE"
+        echo "Success: Added mapping:"
+    fi
     echo "  Local:  $local_path"
     echo "  Remote: $REMOTE$remote_path"
 }
@@ -162,8 +199,8 @@ forget_path() {
         local_path=$(to_config_path "$(realpath -m "$local_path")")
     fi
 
-    if yq -e ".targets[] | select(.local == \"$local_path\")" "$CONFIG_FILE" >/dev/null 2>&1; then
-        yq -i ".targets |= del(.[] | select(.local == \"$local_path\"))" "$CONFIG_FILE"
+    if has_target "$local_path"; then
+        CFG_LOCAL="$local_path" yq -i '.targets |= del(.[] | select(.local == strenv(CFG_LOCAL)))' "$CONFIG_FILE"
         echo "Success: Removed '$local_path' from sync config."
     else
         echo "Error: No mapping found for local path '$local_path'."
@@ -261,7 +298,7 @@ sync_all() {
 sync_one() {
     local local_path=$(realpath -m "$1")
     local flag="$2"
-    local remote_path=$(yq ".targets[] | select(.local == \"$(to_config_path "$local_path")\") | .remote" "$CONFIG_FILE")
+    local remote_path=$(remote_for "$(to_config_path "$local_path")")
 
     if [[ -z "$remote_path" || "$remote_path" == "null" ]]; then
         echo "Error: '$local_path' is not in config. Use 'gdrive add' first."
@@ -300,6 +337,26 @@ sync_cmd() {
     fi
 }
 
+usage() {
+    echo "gdrive CLI — easily sync files to Google Drive."
+    echo "Usage: gdrive [flags] <command> [args]"
+    echo ""
+    echo "Flags:"
+    echo "  -h, --help           : Show this help"
+    echo "  -v, --verbose        : Show full rclone output"
+    echo "  -d, --dry-run        : See what would happen without making changes"
+    echo "  --prefer-local       : Resolve conflicts by keeping local version"
+    echo "  --prefer-remote      : Resolve conflicts by keeping remote version"
+    echo ""
+    echo "Commands:"
+    echo "  add <local> [remote] : Add path to config, or change its remote"
+    echo "  forget [local]       : Remove path from config (interactive if empty)"
+    echo "  sync [local]         : Sync one configured path (defaults to all paths)"
+    echo "  resync [local]       : Force resync (defaults to all paths)"
+    echo "  list                 : List configured paths"
+    echo "  help                 : Show this help"
+}
+
 # --- Main Logic ---
 
 COMMAND=""
@@ -311,16 +368,20 @@ while [[ "$#" -gt 0 ]]; do
             VERBOSE=true
             shift
             ;;
+        -h|--help)
+            COMMAND="help"
+            shift
+            ;;
         -d|--dry-run)
-            SESSION_FLAGS="${SESSION_FLAGS:+$SESSION_FLAGS }--dry-run"
+            SESSION_FLAGS+=(--dry-run)
             shift
             ;;
         --prefer-local)
-            SESSION_FLAGS="${SESSION_FLAGS:+$SESSION_FLAGS }--conflict-resolve path2"
+            SESSION_FLAGS+=(--conflict-resolve path2)
             shift
             ;;
         --prefer-remote)
-            SESSION_FLAGS="${SESSION_FLAGS:+$SESSION_FLAGS }--conflict-resolve path1"
+            SESSION_FLAGS+=(--conflict-resolve path1)
             shift
             ;;
         *)
@@ -337,25 +398,9 @@ done
 case "$COMMAND" in
     add)     add_path "${CMD_ARGS[0]}" "${CMD_ARGS[1]}" ;;
     forget)  forget_path "${CMD_ARGS[0]}" ;;
-    sync)    sync_cmd "${CMD_ARGS[0]}" ;;
-    resync)  resync_path "${CMD_ARGS[0]}" ;;
+    sync)    acquire_sync_lock; sync_cmd "${CMD_ARGS[0]}" ;;
+    resync)  acquire_sync_lock; resync_path "${CMD_ARGS[0]}" ;;
     list)    yq '.' "$CONFIG_FILE" ;;
-    *)
-        echo "gdrive CLI — easily sync files to Google Drive."
-        echo "Usage: gdrive [flags] <command> [args]"
-        echo ""
-        echo "Flags:"
-        echo "  -v, --verbose        : Show full rclone output"
-        echo "  -d, --dry-run        : See what would happen without making changes"
-        echo "  --prefer-local       : Resolve conflicts by keeping local version"
-        echo "  --prefer-remote      : Resolve conflicts by keeping remote version"
-        echo ""
-        echo "Commands:"
-        echo "  add <local> [remote] : Add path to config"
-        echo "  forget [local]       : Remove path from config (interactive if empty)"
-        echo "  sync [local]         : Sync one configured path (defaults to all paths)"
-        echo "  resync [local]       : Force resync (defaults to all paths)"
-        echo "  list                 : List configured paths"
-        exit 1
-        ;;
+    help)    usage ;;
+    *)       usage >&2; exit 1 ;;
 esac

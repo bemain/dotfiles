@@ -14,6 +14,7 @@ _gdrive() {
     typeset -A opt_args
 
     _arguments -C \
+        '(- *)'{-h,--help}'[show help]' \
         '(-v --verbose)'{-v,--verbose}'[show full rclone output]' \
         '(-d --dry-run)'{-d,--dry-run}'[show what would happen without making changes]' \
         '(--prefer-remote)--prefer-local[resolve conflicts by keeping local version]' \
@@ -25,11 +26,12 @@ _gdrive() {
         command)
             local -a commands
             commands=(
-                'add:add path to config'
+                'add:add path to config, or change its remote'
                 'forget:remove path from config'
                 'sync:sync one configured path (defaults to all paths)'
                 'resync:force resync (defaults to all paths)'
                 'list:list configured paths'
+                'help:show help'
             )
             _describe 'command' commands
             ;;
