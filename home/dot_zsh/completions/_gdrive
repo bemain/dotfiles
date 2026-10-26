@@ -5,6 +5,7 @@ _gdrive_targets() {
     [[ -f "$config" ]] || return
     local -a targets
     targets=(${(f)"$(sed -n 's/^[[:space:]]*-\{0,1\}[[:space:]]*local:[[:space:]]*"\{0,1\}\([^"]*\)"\{0,1\}[[:space:]]*$/\1/p' "$config")"})
+    targets=("${targets[@]/#\~/$HOME}")
     compadd -a targets
 }
 

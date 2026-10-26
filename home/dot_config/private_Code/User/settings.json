@@ -53,7 +53,7 @@
     "http.systemCertificatesNode": true,
     "git.pruneOnFetch": true,
     "terminal.integrated.env.linux": {
-        "SSH_AUTH_SOCK": "/var/home/agardh/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock",
+        "SSH_AUTH_SOCK": "${env:HOME}/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock",
     },
     "gitlens.signing.enableKeyGeneration": false,
     "git.enableCommitSigning": false,

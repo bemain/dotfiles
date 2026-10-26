@@ -8,6 +8,3 @@ Type=oneshot
 ExecStart=/usr/bin/distrobox upgrade --all
 StandardOutput=journal
 StandardError=journal
-
-[Install]
-WantedBy=default.target

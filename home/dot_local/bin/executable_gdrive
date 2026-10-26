@@ -25,6 +25,23 @@ if [[ ! -f "$CONFIG_FILE" ]]; then
     echo "targets: []" > "$CONFIG_FILE"
 fi
 
+# Paths under $HOME are stored as ~/... so the config is portable across users.
+to_config_path() {
+    if [[ "$1" == "$HOME" || "$1" == "$HOME/"* ]]; then
+        printf '~%s' "${1#"$HOME"}"
+    else
+        printf '%s' "$1"
+    fi
+}
+
+from_config_path() {
+    if [[ "$1" == "~" || "$1" == "~/"* ]]; then
+        printf '%s%s' "$HOME" "${1#\~}"
+    else
+        printf '%s' "$1"
+    fi
+}
+
 # --- Helper: Desktop Notifications ---
 send_notification() {
     local title="$1"
@@ -108,7 +125,7 @@ add_path() {
 
     [[ ! -e "$local_path" ]] && echo "Error: Local path does not exist." && exit 1
 
-    yq -i ".targets += [{\"local\": \"$local_path\", \"remote\": \"$remote_path\"}]" "$CONFIG_FILE"
+    yq -i ".targets += [{\"local\": \"$(to_config_path "$local_path")\", \"remote\": \"$remote_path\"}]" "$CONFIG_FILE"
     yq -i ".targets |= unique_by(.local)" "$CONFIG_FILE"
 
     echo "Success: Added mapping:"
@@ -142,7 +159,7 @@ forget_path() {
             return
         fi
     else
-        local_path=$(realpath -m "$local_path")
+        local_path=$(to_config_path "$(realpath -m "$local_path")")
     fi
 
     if yq -e ".targets[] | select(.local == \"$local_path\")" "$CONFIG_FILE" >/dev/null 2>&1; then
@@ -192,7 +209,7 @@ sync_all() {
     local locals=() remotes=()
     local lp rp
     while IFS=$'\t' read -r lp rp; do
-        locals+=("$lp")
+        locals+=("$(from_config_path "$lp")")
         remotes+=("$rp")
     done < <(yq '.targets[] | [.local, .remote] | @tsv' "$CONFIG_FILE")
 
@@ -244,7 +261,7 @@ sync_all() {
 sync_one() {
     local local_path=$(realpath -m "$1")
     local flag="$2"
-    local remote_path=$(yq ".targets[] | select(.local == \"$local_path\") | .remote" "$CONFIG_FILE")
+    local remote_path=$(yq ".targets[] | select(.local == \"$(to_config_path "$local_path")\") | .remote" "$CONFIG_FILE")
 
     if [[ -z "$remote_path" || "$remote_path" == "null" ]]; then
         echo "Error: '$local_path' is not in config. Use 'gdrive add' first."

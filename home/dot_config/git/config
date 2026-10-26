@@ -1,5 +1,10 @@
-[credential]
-	helper = store
+# Authenticate to GitHub over SSH through the Bitwarden agent, so no token is
+# stored on disk and it works the same on the host and in distrobox.
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+
+[url "git@gist.github.com:"]
+	insteadOf = https://gist.github.com/
 
 [user]
 	name = bemain
@@ -29,7 +34,6 @@
     ui = auto
 
 [core]
-    excludesFile = $HOME/.config/git/ignore
     sshCommand = ssh -i ~/.ssh/id_default.pub -o IdentitiesOnly=yes
 
 [alias]

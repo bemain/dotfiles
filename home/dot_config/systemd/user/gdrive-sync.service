@@ -5,9 +5,6 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/var/home/agardh/.local/bin/gdrive sync
+ExecStart=%h/.local/bin/gdrive sync
 StandardOutput=journal
 StandardError=journal
-
-[Install]
-WantedBy=default.target

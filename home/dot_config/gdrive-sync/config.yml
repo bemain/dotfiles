@@ -1,17 +1,17 @@
 targets:
-  - local: /var/home/agardh/Games/PS3
+  - local: ~/Games/PS3
     remote: Datorspel/PS3
-  - local: /var/home/agardh/Games/Switch
+  - local: ~/Games/Switch
     remote: Datorspel/Switch
-  - local: /var/home/agardh/Google Drive/Chalmers
+  - local: ~/Google Drive/Chalmers
     remote: Chalmers
-  - local: /var/home/agardh/Google Drive/Obsidian
+  - local: ~/Google Drive/Obsidian
     remote: Obsidian
-  - local: /var/home/agardh/Music
+  - local: ~/Music
     remote: Musik
-  - local: /var/home/agardh/.var/app/io.github.ryubing.Ryujinx/config/Ryujinx
+  - local: ~/.var/app/io.github.ryubing.Ryujinx/config/Ryujinx
     remote: Datorspel/Saves/Ryujinx
-  - local: /var/home/agardh/.var/app/net.rpcs3.RPCS3/config/rpcs3
+  - local: ~/.var/app/net.rpcs3.RPCS3/config/rpcs3
     remote: Datorspel/Saves/RPCS3
-  - local: /var/home/agardh/Documents/Clone Hero/Songs
+  - local: ~/Documents/Clone Hero/Songs
     remote: Datorspel/Saves/Clone Hero

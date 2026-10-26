@@ -32,7 +32,7 @@ fi
 if [ -d $HOME/.pyenv ]; then
 	export PYENV_ROOT="$HOME/.pyenv"
 	[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-	eval "$(pyenv init - bash)"
+	eval "$(pyenv init - zsh)"
 fi
 
 # nvm
@@ -44,8 +44,8 @@ fi
 
 # Balena CLI
 if [ -d $HOME/.local/share/balena ]; then
-	export export PATH="$PATH:$HOME/.local/share/balena/bin"
+	export PATH="$PATH:$HOME/.local/share/balena/bin"
 fi
 
 # Bitwarden SSH agent
-export SSH_AUTH_SOCK="/var/home/agardh/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock"
+export SSH_AUTH_SOCK="$HOME/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock"
