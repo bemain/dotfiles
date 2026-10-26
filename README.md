@@ -16,7 +16,7 @@ chezmoi init --apply bemain
 ```
 
 ## Usage
-The `cz` command is an alias for `chezmoi`, specified in [~/.aliases](/dot_aliases).
+The `cz` command is an alias for `chezmoi`, specified in [~/.aliases](/home/dot_aliases).
 
 To begin managing a file with chezmoi, use:
 ```bash
@@ -38,7 +38,7 @@ To see what changes chezmoi will make to your local files, use:
 cz diff
 ```
 
-Changes to the dotfiles (done using `cz edit`) should be [automatically pushed](https://www.chezmoi.io/user-guide/daily-operations/#automatically-commit-and-push-changes-to-your-repo) when using the [default config](/.chezmoi.toml.tmpl), but if they aren't you can push them manually:
+Changes to the dotfiles (done using `cz edit`) should be [automatically pushed](https://www.chezmoi.io/user-guide/daily-operations/#automatically-commit-and-push-changes-to-your-repo), but if they aren't you can push them manually:
 ```bash
 chezmoi cd
 git add .

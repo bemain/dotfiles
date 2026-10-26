@@ -1,0 +1,41 @@
+#!/bin/bash
+# Installs the flatpaks listed in .chezmoidata/packages.yaml from flathub.
+# Apps already installed from another remote are left alone, since they may
+# have been installed from there on purpose (e.g. the bemain remote).
+
+FLATPAK_APP_IDS=(
+{{- range .flatpaks }}
+    {{ . | quote }}
+{{- end }}
+)
+
+FLATPAK_SCOPE_FLAG="--user"
+
+echo "Ensuring Flathub remote is added."
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo "${FLATPAK_SCOPE_FLAG}"
+
+echo "Ensuring bemain remote is added."
+flatpak remote-add --if-not-exists bemain https://bemain.github.io/flatpaks/index.flatpakrepo "${FLATPAK_SCOPE_FLAG}"
+
+echo "Checking which Flatpak apps need to be installed."
+
+INSTALL_APPS=()
+for APP_ID in "${FLATPAK_APP_IDS[@]}"; do
+    ORIGIN="$(flatpak info --show-origin "${APP_ID}" 2>/dev/null)"
+    if [ -z "${ORIGIN}" ]; then
+        INSTALL_APPS+=("${APP_ID}")
+    elif [ "${ORIGIN}" != "flathub" ]; then
+        echo "WARNING: ${APP_ID} is installed from '${ORIGIN}', not flathub. Leaving it alone."
+    fi
+done
+
+if (( ${#INSTALL_APPS[@]} == 0 )); then
+    echo "No Flatpak apps to install."
+    exit 0
+fi
+
+echo "Installing ${INSTALL_APPS[*]}"
+if ! flatpak install "${FLATPAK_SCOPE_FLAG}" -y flathub "${INSTALL_APPS[@]}"; then
+    echo "ERROR: Failed to install apps from Flathub."
+    exit 1
+fi

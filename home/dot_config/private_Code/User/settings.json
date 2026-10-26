@@ -29,7 +29,6 @@
         "gitlens.currentLine.enabled",
         "github.copilot.enable"
     ],
-    "geminicodeassist.project": "",
     "diffEditor.codeLens": true,
     "editor.renderWhitespace": "none",
     "editor.renderControlCharacters": false,
@@ -59,11 +58,11 @@
     "gitlens.signing.enableKeyGeneration": false,
     "git.enableCommitSigning": false,
     "git.replaceTagsWhenPull": true,
-    "geminicodeassist.inlineSuggestions.enableAuto": false,
     "workbench.editorAssociations": {
         "*.copilotmd": "vscode.markdown.preview.editor",
         "{git,gitlens,chat-editing-snapshot-text-model,copilot,git-graph,git-graph-3}:/**/*.qrc": "default",
-        "*.qrc": "qt-core.qrcEditor"
+        "*.qrc": "qt-core.qrcEditor",
+        "*.md": "vscode.markdown.editor"
     },
     "qt-core.additionalQtPaths": [
         {
@@ -81,8 +80,7 @@
         "windows",
         "web"
     ],
-    "gitlens.ai.model": "vscode",
-    "gitlens.ai.vscode.model": "copilotcli:",
     "editor.bracketPairColorization.enabled": false,
     "workbench.secondarySideBar.showLabels": false,
+    "githubPullRequests.pushBranch": "always",
 }

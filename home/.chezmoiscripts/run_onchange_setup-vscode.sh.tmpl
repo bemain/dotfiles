@@ -1,0 +1,12 @@
+#!/bin/bash
+# Installs the VS Code extensions listed in .chezmoidata/packages.yaml
+
+EXTENSION_IDS=(
+{{- range .vscodeExtensions }}
+    {{ . | quote }}
+{{- end }}
+)
+
+for EXTENSION_ID in "${EXTENSION_IDS[@]}"; do
+    distrobox enter -- code --install-extension "${EXTENSION_ID}"
+done
