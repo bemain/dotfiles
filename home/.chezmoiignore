@@ -3,3 +3,7 @@
 
 # Bitwarden
 .var/app/com.bitwarden.desktop/config/Bitwarden/data.json
+
+# Compiled by run_after_compile-gnome-extension-schemas.sh, not part of the
+# extension archives
+.local/share/gnome-shell/extensions/*/schemas/gschemas.compiled
