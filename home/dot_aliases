@@ -11,6 +11,33 @@ alias snapper="snapper -c home"
 alias db="distrobox"
 alias dbassemble="distrobox assemble create --file '$HOME/.local/share/chezmoi/distrobox/distrobox.ini'"
 
+# Herdr saves a reconnect command for agent panes only, so the dashboard pane comes back as an idle shell.
+_herdr_rig_dashboard() {
+  local herdr="$HOME/.local/bin/herdr" pane try
+  export HERDR_SOCKET_PATH="$HOME/.config/herdr/herdr.sock"
+  for try in 1 2 3 4 5 6 7 8 9 10; do
+    sleep 1
+    pane=$("$herdr" pane list | yq -p json -r '[.result.panes[] | select(.label == "dashboard") | .pane_id] | .[0] // ""')
+    [ -n "$pane" ] && break
+  done
+  [ -n "$pane" ] || return
+  # Only an idle shell: its own process group is in the foreground.
+  [ "$("$herdr" pane process-info --pane "$pane" | yq -p json '.result.process_info | .foreground_process_group_id == .shell_pid')" = true ] || return
+  "$herdr" pane run "$pane" " env -u TMUX tmux attach -t '=operator-human@kernel'"
+}
+
+# OpenRig: start the daemon and the rigs that were running, then attach to the Herdr server that shows them.
+# OpenRig must come first: after a reboot, Herdr's saved panes reattach to the rigs' tmux sessions.
+# rig needs node, so run this inside the fedora distrobox.
+herdr-rig() {
+  rig start --last || return
+  ( ( _herdr_rig_dashboard >/dev/null 2>&1 ) & )
+  env -u TMUX -u HERDR_SESSION \
+    HERDR_SOCKET_PATH="$HOME/.config/herdr/herdr.sock" \
+    HERDR_CONFIG_PATH="$HOME/.config/herdr/.openrig-herdr-a8bc286b9422b4231070.toml" \
+    "$HOME/.local/bin/herdr" "$@"
+}
+
 alias yt-mp3="yt-dlp -f ba -x --audio-format mp3"
 
 # Git
