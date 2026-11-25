@@ -1,0 +1,4 @@
+onboarding = false
+
+[ui]
+sidebar_start_collapsed = true

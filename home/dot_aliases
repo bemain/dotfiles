@@ -32,9 +32,8 @@ _herdr_rig_dashboard() {
 herdr-rig() {
   rig start --last || return
   ( ( _herdr_rig_dashboard >/dev/null 2>&1 ) & )
-  env -u TMUX -u HERDR_SESSION \
+  env -u TMUX -u HERDR_SESSION -u HERDR_CONFIG_PATH \
     HERDR_SOCKET_PATH="$HOME/.config/herdr/herdr.sock" \
-    HERDR_CONFIG_PATH="$HOME/.config/herdr/.openrig-herdr-a8bc286b9422b4231070.toml" \
     "$HOME/.local/bin/herdr" "$@"
 }
 
