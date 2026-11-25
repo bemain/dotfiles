@@ -1,0 +1,11 @@
+{
+  "provider": {
+    "selected": "claude"
+  },
+  "policies": {
+    "claudeCompaction": {
+      "thresholdPercent": 25,
+      "enabled": true
+    }
+  }
+}

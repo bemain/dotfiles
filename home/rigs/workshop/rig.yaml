@@ -1,0 +1,92 @@
+version: "0.2"
+name: workshop
+summary: >
+  A small team that works in any repository, OpenRig's own included, launched
+  from your clone with --cwd: a lead who takes your goal and scopes the work, a
+  builder, a QA seat and a code reviewer. The installing agent selects each
+  runtime from your available logins; the team stays named workshop.
+culture_file: CULTURE.md
+permission_policy: builtin:auto
+non_interruptive: true
+managed_blocks:
+  claude-code: CLAUDE.local.md
+docs:
+  - path: README.md
+startup:
+  files:
+    - path: startup/context.md
+      delivery_hint: send_text
+  actions:
+    - type: startup_proof
+      value: authenticated
+      phase: after_files
+      idempotent: true
+pods:
+  - id: orch
+    label: Orchestration
+    summary: Starts from your goal, scopes the work and keeps the pull request
+      description true.
+    members:
+      - id: lead
+        agent_ref: local:agents/workshop
+        profile: lead
+        runtime: claude-code
+        cwd: .
+        startup:
+          files:
+            - path: startup/lead-first-move.md
+              delivery_hint: send_text
+          actions: []
+    edges: []
+  - id: dev
+    label: Development
+    summary: Builds, tests and independently reviews the change.
+    members:
+      - id: build
+        agent_ref: local:agents/workshop
+        profile: builder
+        runtime: claude-code
+        cwd: .
+      - id: review
+        agent_ref: local:agents/workshop
+        profile: code-reviewer
+        runtime: claude-code
+        cwd: .
+      - id: qa
+        agent_ref: local:agents/workshop
+        profile: qa
+        runtime: claude-code
+        cwd: .
+      - id: art
+        agent_ref: local:agents/workshop
+        profile: artist
+        runtime: claude-code
+        cwd: .
+        env:
+          # Blender runs as a host Flatpak through host-spawn, which needs the session bus.
+          DBUS_SESSION_BUS_ADDRESS: unix:path=/run/user/1000/bus
+          # Path only; the key itself stays in that file, outside the repository.
+          GEMINI_API_KEY_FILE: /var/home/agardh/.config/critterbug/gemini-api-key
+    edges:
+      - kind: delegates_to
+        from: build
+        to: review
+      - kind: delegates_to
+        from: build
+        to: qa
+      - kind: delegates_to
+        from: art
+        to: review
+edges:
+  - kind: delegates_to
+    from: orch.lead
+    to: dev.build
+  - kind: can_observe
+    from: orch.lead
+    to: dev.review
+  - kind: can_observe
+    from: orch.lead
+    to: dev.qa
+  - kind: delegates_to
+    from: orch.lead
+    to: dev.art

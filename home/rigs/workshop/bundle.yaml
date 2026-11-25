@@ -1,0 +1,119 @@
+schema_version: 2
+name: workshop
+version: 0.1.0
+created_at: 2026-11-16T18:51:51.702Z
+rig_spec: rig.yaml
+agents:
+  - name: workshop
+    version: "1.0"
+    path: agents/workshop
+    original_ref: local:agents/workshop
+    hash: ea8c9ffaf1d1819cd33578a1ccf69db0ab472e77a75d12d0c4b72be052f6b4b6
+    import_entries: []
+culture_file: CULTURE.md
+integrity:
+  algorithm: sha256
+  files:
+    CULTURE.md: 3499d0e9fb377aef88b725c756462e264efff4cfeb391f59abcefcd1700de7c3
+    README.md: 029a3e86b0de73654832fb9fa1f3434351f0875bb67b4d1974a43a7645accc45
+    agents/workshop/PI-SKILLS.md: 3a0b6561697a83665fce34deab3e06995d344a6071d64f0bf5f474cce8a40962
+    agents/workshop/agent.yaml: ea8c9ffaf1d1819cd33578a1ccf69db0ab472e77a75d12d0c4b72be052f6b4b6
+    agents/workshop/bundle-skills/ponytail/LICENSE: fb1bc6909ac3ef82d5c22106e32ef682b0cff66788fa915fb9b53b15c9d2f3ab
+    agents/workshop/bundle-skills/ponytail/SKILL.md: d1ffcddbc486ab787d5797441e8b6e4717da3249c6786b83fc2abd2f12803c29
+    agents/workshop/bundle-skills/using-the-tui-together/SKILL.md: 711c06fbf20797a739bf276e5d4194ca147522af8f35d9497772a5c8c50de9e2
+    agents/workshop/guidance/builder.md: a0b4f0aab3a4c45c56610e9c9b63695bb0953b79869a552c8809f5a799fa09ae
+    agents/workshop/guidance/code-reviewer.md: 6917e284f25d73342b8df7ea099d11b411bee0e64587cae54088257af889942b
+    agents/workshop/guidance/lead.md: 8efae8c5ff13640083f406a575f96d8e2852bf6927682ab5a75f7556762d07f6
+    agents/workshop/guidance/qa.md: 5721ae7e15dfd09e236fead5c11ce3a7d84a2b94d95f9760fbd751a0319a27c5
+    agents/workshop/pi-skills.lock.json: 649e33d822ae7552ef4cca7d8da79b15eda11432d68701aa6f8489f21a033c36
+    agents/workshop/runtime/claude-activity-hooks.json: 51c0746dbd0564c4bd89ecd5d0ef4789caa7cc02f6f3f93a2c2aee38ae37c8d5
+    agents/workshop/skills/LICENSE: 9ba9bf171f337262f0c9e3616f9e49463b199c109de7268b9b0f995c2c1ac743
+    agents/workshop/skills/agent-operated-software/SKILL.md: 9159d26e7884bc5205f8b06adaa65625c7d9c6bef41dc2f307d91da4cc1b424b
+    agents/workshop/skills/agent-operated-workflows/SKILL.md: 24e54cbfa979999f523516112670618b2926ae5d42c7aa0846c94db214857ea5
+    agents/workshop/skills/applying-a-permission-policy/SKILL.md: f7bba8d50b10fc8715f40a57bf82677ca9388c6718c8a162833d9c6daf2afdca
+    agents/workshop/skills/claude-compaction-restore/SKILL.md: 7201d5cafb4a02f36031e82e4c07f4243852a89546f5913c275ee59e45fd42ce
+    agents/workshop/skills/claude-compaction-restore/reference/SKILL-v1.md: 6af2a889c9c38227fb186897c6e29185f81b215822070b469a6ceeb47734e133
+    agents/workshop/skills/claude-compaction-restore/scripts/precompact-hook.mjs: 712e97c8beb02eb6c2815884a960778a225d8f6238dfe04a9b0547c34eaa131d
+    agents/workshop/skills/claude-compaction-restore/scripts/restore-from-jsonl.mjs: 5584cff4ab36cd843e14c81bd201e4a2f8e498e995abacc4f81ec6c1fc556b10
+    agents/workshop/skills/claude-compaction-restore/templates/compact-instruction.md: 682c778464517b831902ddc2678c055545899b4751a1d32391ce965d5eb7061d
+    agents/workshop/skills/claude-compaction-restore/templates/post-compact-restore-instruction.md: 10a5a7e5e052f3aa000a4209f386dc4eb90a3c2bba449ca685f124714f59e47a
+    agents/workshop/skills/delegating-work/SKILL.md: fc5638949ce7600446a04e59dbe94996ea910e94beef1fa71cb7a31fa140fce6
+    agents/workshop/skills/developing-openrig/SKILL.md: fba6335a4e091adb195d90774247bf1ee0e882464bb2ebc3a5d7e77b2d354e00
+    agents/workshop/skills/forming-an-openrig-mental-model/SKILL.md: cd7bfdcc5a87485140cfcac94bc2c703aec5c5b220a3397e139c4fd6db4339e6
+    agents/workshop/skills/loading-addressable-markdown/SKILL.md: 104dc6a02ae6e2d0eff519387c6839cb09803945b9ee35ec3498af8feaaa8d1e
+    agents/workshop/skills/loading-addressable-markdown/scripts/resolve-markdown.mjs: 61a6d52c6c94fb1878361d19bdfaeb4524062fc4c483f557ab2f140e516d15f9
+    agents/workshop/skills/messaging-the-human/SKILL.md: 680ca50b22b0aec280a6c7bb5e118cda1dca991742f42f9a5b74e138448753fe
+    agents/workshop/skills/mission-slice-sop/SKILL.md: a01e72a526c975a86f0754af206505efbafcbbc3583bea1394c50759dc5a584f
+    agents/workshop/skills/openrig-operating-model/SKILL.md: 8364530a6199f6e2df42b773c35434cb4ecade0ede48e439cd9fc03df4469896
+    agents/workshop/skills/openrig-operating-model/scripts/compose.py: f71065de92b1ef4ce3ca78a8bc0cfe07bcf54ed84bb8ec5359d3889674fe385d
+    agents/workshop/skills/openrig-operating-model/scripts/scaffold.sh: 873fc78d8581e463079db24cfbdef3228b845c1a4c32e0d631234eacb3094be7
+    agents/workshop/skills/openrig-operating-model/scripts/trace-due.sh: c56a8b044e624f40972654bc810df623e70303cc5daa4aa06e3ee86b262b7792
+    agents/workshop/skills/openrig-operating-model/scripts/trace-stamp.sh: 6fd3a0999dd36ea58252181f5129489a460a60631291f0ff84c4f374b65113c7
+    agents/workshop/skills/openrig-operating-model/scripts/trunk-diff.sh: c0362a5a02aed2caf28b7c026989c88a6fef0bc35fa2e6ae8ba9dba2c2f9cc64
+    agents/workshop/skills/openrig-operating-model/templates/LEARNED.md: 37d67f788ffe6c4bd282e5ed0859e07e613b8940e8fa84726c84fbaef8f87fd6
+    agents/workshop/skills/openrig-operating-model/templates/NOTES.md: ca73848520871474428f87d28bb2346feeb3bd59763b299399d9dacf4d64bcf5
+    agents/workshop/skills/openrig-operating-model/templates/PLAYBOOK.md: ff6f9dc8caab06dc7b9ae21977310ddefa23e925453bd54629ce0a669403bfb0
+    agents/workshop/skills/openrig-operating-model/templates/SOP.md: 1eaf0daf4f9bbf0715e6a5aaf0f29f030af5fe8b8a10232488ee97c507afa6dc
+    agents/workshop/skills/openrig-operating-model/templates/SPEC.md: f126536daa59cea3f1cfb0898d83c7cdf99f6392f6f155ea64fe55187dd0f5f1
+    agents/workshop/skills/openrig-skills/SKILL.md: bdd6594ae1108455103239d39694c865cc40d3f7d9f24cd3566a18397df270da
+    agents/workshop/skills/openrig-user/SKILL.md: 01cb169050a3d4f51ad7b263772c6ed58f62683df820efeac1a88faadf9cd086
+    agents/workshop/skills/orienting-to-an-inherited-seat/CHANGELOG.md: 4d0970e75e5c15b00a48d6a7150376d646257777264fd1b9a191165a8d5a6e84
+    agents/workshop/skills/orienting-to-an-inherited-seat/SKILL.md: 252fed402f19027056bbba241df3305be88de3175b67dc8fe051143bb0d4412b
+    agents/workshop/skills/queue-handoff/SKILL.md: 96251f6830006bb9d8ede2e5826ab936df4a9fb91090187a23ccaf860ab76336
+    agents/workshop/skills/refocusing/SKILL.md: b9d1837095dceaaed7cac492cfd4fda0396dafae98e3a7f53d5314e2076540f7
+    agents/workshop/skills/refocusing/references/refocus.md: 6e71513e82bd815e1506b0be4f9a972eecd3053a8deb06340c10b1d1792489bc
+    agents/workshop/skills/refocusing/scripts/trace-to-root.py: 077c88aaea3a11e63cf2bd353a0fd22ced8d3c25ca8f44dbecdf7fb415e0612c
+    agents/workshop/skills/retiring-and-inheriting-a-seat/CHANGELOG.md: 1756a0a6dadc015e2744b4c39a3e7cd08813d9d421e788e953ac5ad75b064197
+    agents/workshop/skills/retiring-and-inheriting-a-seat/SKILL.md: c03449dd9e9ba225cd06810e9008dfc086b6d433a28d80066d0edc0d9207d733
+    agents/workshop/skills/seat-continuity-and-handover/SKILL.md: ba5a704b1999891bf694f7248c6a43a789408fc0b82b7d91da63c18f3b26c870
+    agents/workshop/skills/seat-continuity-and-handover/references/apprentice-evidence-toolkit.md: a50bd7a3107762dbb6accd5d2fb7e058b408b85b09067ac79a7a8af6212234fd
+    agents/workshop/skills/seat-continuity-and-handover/references/apprentice-successor-seat-cutover.md: 0c865b76c9b0908373d3cf17439ef31b08e20a769c1cef1bea2403d963887840
+    agents/workshop/skills/seat-continuity-and-handover/references/orchestrator-role.md: 2ddf05125e0bf22e2dc64cb328fcc4bd94fa62eb2fcfd21d75f21c488c72ecaa
+    agents/workshop/skills/session-compaction-and-restore/SKILL.md: 1abdf9810903e805d81946cd0fe0af70fc96a6103cdf8c1ba094b9c989cb3d0d
+    agents/workshop/skills/software-for-agents/SKILL.md: c36c6d3ae7484f477f1bd24e8ff72846f6dfbff685aef1e780f6011072a51ac7
+    rig.yaml: 9f07ece18f5fab542778ab1248c6c0b84b564024f764ae81e3bd81a5fc477ff6
+    startup/context.md: a061fe0bc6bae40c1f67fb259ba14c2e190b8aa9f06a6962a749a8ad5da96d97
+    startup/lead-first-move.md: 1b39703c32b6197375fd17741506029910d09665e517dda6fd1b2b447f43f6d4
+assembler:
+  openrigVersion: 0.7.16
+provenance:
+  source:
+    repository: https://github.com/mvschwarz/openrig-world
+    folder: rigs/workshop
+    requestedRef: f4579db3ab7e2788bb0fcf0b15f6ba0c6ce4f497
+    resolvedCommit: f4579db3ab7e2788bb0fcf0b15f6ba0c6ce4f497
+    canonicalUrl: https://github.com/mvschwarz/openrig-world/tree/f4579db3ab7e2788bb0fcf0b15f6ba0c6ce4f497/rigs/workshop
+  created_at: 2026-11-16T18:51:51.702Z
+  daemon_version: 0.7.16
+compatibility:
+  min_daemon_version: 0.6.6
+  min_cli_version: 0.6.6
+preconditions:
+  - name: "Install and run the rig as your normal user, not root: Claude Code
+      refuses to bypass permissions as root or under sudo."
+  - name: Open a shell at the root of your clone of the repository you want to work
+      on, set up the way its README says. Optionally add OpenRig's public
+      context pack, then run the install from that same shell.
+    commands:
+      - rig context add --git https://github.com/mvschwarz/openrig-world
+  - name: "Keep OpenRig's files out of your commits: from the root of your clone,
+      add CLAUDE.local.md, AGENTS.md, /.openrig/, .claude/settings.local.json
+      and gate-lane-verdict.json to .git/info/exclude (the README has the
+      command). The lead adds any that are missing when it starts."
+  - name: If you ask Claude Code to do this setup for you, plan to run some steps
+      yourself. In OpenRig's tests on macOS, Claude Code's default auto mode
+      declined the rig up line ([Create Unsafe Agents], because it starts new
+      agents) on 2.1.289 and 2.1.290, and in an earlier 2.1.289 run also
+      declined adding a permission rule for itself ([Self-Modification]; add any
+      rule yourself with /permissions or in .claude/settings.local.json) and rig
+      context add --git ([Untrusted Code Integration]), even with an allow rule
+      for that command. Run rig context add --git and rig up yourself in a
+      terminal, from the root of your clone.
+  - name: "This team declares broad access and non-interruptive launches: Claude
+      bypasses permissions, Codex runs unsandboxed and never asks, and Pi gets
+      full resource trust. OpenRig accepts supported Claude/Codex warning
+      screens with launch flags; sign-in and unsupported harness notices still
+      require you."
+configuration:
+  id: dev.build=claude-code,dev.qa=claude-code,dev.review=claude-code,orch.lead=claude-code
+  preset: all-claude
